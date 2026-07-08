@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fokus-Schild: Vollbild-Hinweis, der sich im Lernmodus ueber andere Apps legt. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#14181B"
+    android:padding="28dp">
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:scaleType="fitCenter"
+        android:contentDescription="@null"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Bleib dran 🌱"
+        android:textColor="#F2F0EB"
+        android:textSize="26sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Du bist im Fokus-Modus.\nZurück zum Lernen."
+        android:textColor="#F2F0EB"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/shield_resume"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:text="Zurück zur App"
+        android:textColor="#14181B"
+        android:textStyle="bold"
+        android:backgroundTint="#7BC96F"/>
+
+    <Button
+        android:id="@+id/shield_abort"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Notfall: Session abbrechen"
+        android:textColor="#C96F6F"/>
+</LinearLayout>

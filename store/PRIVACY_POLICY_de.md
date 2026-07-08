@@ -1,17 +1,17 @@
 # Datenschutzerklärung – Focus Garden
 
-**Stand:** 6. Juli 2026
+**Stand:** 8. Juli 2026
 
-> Hinweis für dich (nicht mit veröffentlichen): Ersetze **[Dein Name]** und
-> **[Deine Kontakt-E-Mail]** durch deine echten Angaben, bevor du diese Seite
-> veröffentlichst. Play verlangt eine erreichbare Kontaktmöglichkeit.
+> Veröffentlicht unter: https://niklas-brk.github.io/focus-garden/datenschutz.html
+> (Quelle: Repo `Niklas-brk/Niklas-brk.github.io`, Datei `focus-garden/datenschutz.html` –
+> bei Änderungen beide Stellen aktualisieren.)
 
 ---
 
 Verantwortlich für die Datenverarbeitung im Sinne der DSGVO:
 
-**[Dein Name]**
-Kontakt: **[Deine Kontakt-E-Mail]**
+**Niklas Bäricke**
+Kontakt: **niklasbaericke@gmail.com**
 
 Diese Datenschutzerklärung informiert dich darüber, wie die App **Focus Garden**
 („die App") mit Daten umgeht.
@@ -55,6 +55,10 @@ Premium besitzt, wird nur lokal auf deinem Gerät gespeichert.
 
 - **Benachrichtigungen**: für die Erinnerung am Session-Ende und die Verwelk-Warnung.
 - **Vibration**: für die haptische Rückmeldung (abschaltbar).
+- **Über anderen Apps anzeigen**: nur für den optionalen „Fokus-Schild" (sanftes
+  Overlay während einer Session); standardmäßig aus, du aktivierst ihn selbst.
+- **Hintergrundbild setzen**: nur wenn du deine Garten-Szene als Handy-Hintergrund
+  übernimmst.
 - **Internet**: ausschließlich für die Werbung und die Kaufabwicklung.
 
 ## 5. Keine Analyse-Tools

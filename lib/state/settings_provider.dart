@@ -25,6 +25,13 @@ class SettingsProvider extends ChangeNotifier {
 
   static const defaultGardenName = 'Mein Garten';
 
+  /// Test-Builds fürs eigene Gerät: Premium per Build-Flag freischalten mit
+  ///   flutter build apk --release --dart-define=PREMIUM_TEST=true ...
+  /// Im normalen (Store-)Build ist das Flag nicht gesetzt -> false, keine
+  /// Auswirkung. Wird bewusst NICHT gespeichert: ohne Flag gebaut gilt wieder
+  /// der ehrliche Kauf-Status.
+  static const _premiumTestBuild = bool.fromEnvironment('PREMIUM_TEST');
+
   late bool _strictMode;
   late bool _blockerOn;
   late bool _soundsOn;
@@ -46,7 +53,7 @@ class SettingsProvider extends ChangeNotifier {
     _soundsOn = storage.getBool(_kSounds, true);
     _hapticsOn = storage.getBool(_kHaptics, true);
     _themeMode = _themeFromString(storage.getString(_kTheme, 'dark'));
-    _premium = storage.getBool(_kPremium, false);
+    _premium = _premiumTestBuild || storage.getBool(_kPremium, false);
     _onboardingDone = storage.getBool(_kOnboarded, false);
     _gardenName = storage.getString(_kGardenName, defaultGardenName);
     _gardenThemeId = storage.getString(_kGardenTheme, 'default');

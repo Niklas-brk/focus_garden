@@ -14,12 +14,14 @@ Ohne den Signierschlüssel kannst du die App **nie wieder aktualisieren**. Siche
 an einem sicheren Ort (Passwort-Manager **und** ein Cloud-Backup):
 
 - Datei: `focus_garden/android/upload-keystore.jks`
-- Passwort (Store **und** Key): `y9TvdDKGKGZ5CtYHtce5cQL2`
+- Passwort (Store **und** Key): steht in `focus_garden/android/key.properties`
+  (die Datei ist absichtlich **git-ignoriert** – zusätzlich in den Passwort-Manager!)
 - Alias: `upload`
 - Zertifikat-Fingerabdruck (SHA-256): `40:C8:24:C1:F8:AD:70:56:62:76:24:64:42:F2:77:68:1F:D8:B8:30:4B:DE:B0:22:EB:6B:0F:9D:1D:4A:FB:13`
 
-> Auch `focus_garden/android/key.properties` enthält das Passwort im Klartext. Diese
-> Datei niemals öffentlich teilen / nicht in ein öffentliches GitHub laden.
+> `key.properties` und der Keystore enthalten Geheimnisse im Klartext und gehören
+> **niemals in ein Git-Repo** (auch kein privates) und nie in einen Chat/Screenshot.
+> Backup beider Dateien liegt in `OneDrive\Projekte\focus_garden\android\`.
 
 ---
 
@@ -40,8 +42,20 @@ an einem sicheren Ort (Passwort-Manager **und** ein Cloud-Backup):
   normale Berechtigung – **sammelt keine Daten** und braucht **keine Sonder-Deklaration**
   in der Play Console (anders als eine Bedienungshilfe). Data-Safety-Angaben unverändert.
 
+- ✅ **Sicherheits-Härtung** (2026-07-08):
+  - Alle lokalen Hive-Daten sind **AES-256-verschlüsselt**; der Schlüssel liegt im
+    **Android Keystore** (via flutter_secure_storage). Alt-Daten bestehender
+    Installationen werden beim ersten Start automatisch verlustfrei migriert.
+  - **R8/Minify + Ressourcen-Shrinking** im Release-Build aktiv (`build.gradle.kts`),
+    Dart-Code wird zusätzlich mit `--obfuscate` verschleiert.
+
 > Wenn du am Code noch etwas änderst, **vor jedem neuen Upload** die Build-Nummer erhöhen
-> (in `pubspec.yaml` z. B. `1.0.1+2`) und mit `flutter build appbundle --release` neu bauen.
+> (in `pubspec.yaml` z. B. `1.0.1+2`) und neu bauen mit:
+> ```
+> flutter build appbundle --release --obfuscate --split-debug-info=build/symbols
+> ```
+> Der Ordner `build/symbols` enthält die Zuordnung für verschleierte Crash-Stacktraces –
+> pro Release-Version aufbewahren (z. B. zippen und zum OneDrive-Backup legen).
 
 ---
 

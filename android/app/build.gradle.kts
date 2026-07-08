@@ -57,6 +57,15 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
+            // Sicherheits-Haertung: R8 schrumpft und verschleiert den Java/Kotlin-
+            // Code, ungenutzte Ressourcen fliegen raus. Dart-Code zusaetzlich beim
+            // Build mit --obfuscate --split-debug-info verschleiern (s. RELEASE_CHECKLIST).
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }

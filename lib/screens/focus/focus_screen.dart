@@ -3,9 +3,13 @@ import 'package:provider/provider.dart';
 
 import '../../l10n/app_strings.dart';
 import '../../models/edu_profile.dart';
+import '../../state/history_provider.dart';
 import '../../state/session_provider.dart';
 import '../../state/settings_provider.dart';
 import '../../state/subject_provider.dart';
+import '../../utils/break_advisor.dart';
+import '../../utils/study_plan.dart';
+import '../../widgets/break_timer_card.dart';
 import '../../widgets/confetti_overlay.dart';
 import '../../widgets/duration_selector.dart';
 import '../../widgets/plant_sprite.dart';
@@ -55,11 +59,25 @@ class _FocusSetup extends StatelessWidget {
 
     final selected = session.selectedSubject ?? subjects.first;
 
+    // Lernplan-Tipp: das heute wichtigste Fach (falls Prüfungen anstehen).
+    final today = StudyPlan.build(subjects, DateTime.now(), days: 1).first.top;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (today != null)
+            Center(
+              child: ActionChip(
+                avatar: const Text('📚'),
+                label: Text(
+                  '${S.planSuggestionPrefix} ${today.subject.name}',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+                onPressed: () => session.selectSubject(today.subject),
+              ),
+            ),
           const _SectionLabel(S.chooseSubject),
           SubjectCarousel(
             subjects: subjects,
@@ -233,6 +251,19 @@ class _ResultView extends StatelessWidget {
               _BloomProgress(
                 fraction: session.bloomFraction,
                 remaining: session.bloomRemainingMinutes,
+              ),
+            ],
+            if (success) ...[
+              const SizedBox(height: 20),
+              // Pausen-Empfehlung: Länge hängt von der Session-Dauer ab,
+              // nach der 4. Session des Tages gibt es eine lange Pause.
+              BreakTimerCard(
+                advice: BreakAdvisor.recommend(
+                  sessionMinutes: session.selectedMinutes,
+                  todaysCompletedSessions:
+                      context.watch<HistoryProvider>().stats.todaySessions,
+                ),
+                notifications: session.notifications,
               ),
             ],
             const SizedBox(height: 32),

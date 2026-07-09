@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../l10n/app_strings.dart';
 import '../../state/session_provider.dart';
 import '../../utils/growth.dart';
+import '../../widgets/banner_ad_slot.dart';
 import '../../widgets/plant_sprite.dart';
 
 /// Vollbild-Timer während einer laufenden Session (Konzept Abschnitt 4).
@@ -130,6 +131,9 @@ class ActiveSessionScreen extends StatelessWidget {
                 ),
               ),
             ),
+            // Banner während der Session (nur Gratis-Version): hierhin schaut
+            // man beim Fokussieren ohnehin nicht – Premium bleibt werbefrei.
+            const BannerAdSlot(),
           ],
         ),
       ),

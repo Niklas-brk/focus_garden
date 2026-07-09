@@ -9,6 +9,7 @@ import '../../state/settings_provider.dart';
 import '../../state/subject_provider.dart';
 import '../../utils/grade_calc.dart';
 import '../../widgets/plant_sprite.dart';
+import '../../widgets/study_plan_card.dart';
 import 'subject_edit_screen.dart';
 
 /// Noten-Tab: Bildungsprofil oben, Fächer/Module in der Mitte, Durchschnitt
@@ -90,6 +91,10 @@ class _GradesScreenState extends State<GradesScreen> {
           ),
 
         const SizedBox(height: 20),
+        if (subjects.isNotEmpty) ...[
+          StudyPlanCard(subjects: subjects),
+          const SizedBox(height: 20),
+        ],
         _AverageCard(subjects: subjects, system: system),
       ],
     );
@@ -242,6 +247,7 @@ class _SubjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final plant = PlantCatalog.byId(subject.plantId);
+    final nextExam = subject.nextExam(DateTime.now());
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -270,6 +276,13 @@ class _SubjectTile extends StatelessWidget {
                                 fontSize: 12,
                                 color:
                                     scheme.onSurface.withValues(alpha: 0.6))),
+                      if (nextExam != null)
+                        Text(
+                          '📅 ${S.shortDate(nextExam.date)} ${S.examKind(nextExam.kind)}',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: scheme.onSurface.withValues(alpha: 0.6)),
+                        ),
                     ],
                   ),
                 ),

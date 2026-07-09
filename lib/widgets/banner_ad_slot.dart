@@ -5,9 +5,10 @@ import 'package:provider/provider.dart';
 import '../services/ads.dart';
 import '../state/settings_provider.dart';
 
-/// Dezenter Banner-Werbeplatz. Laut Konzept (Abschnitt 4/7) NUR im
-/// Statistik-Tab und nur in der Gratis-Version. Bei Premium rendert das
-/// Widget nichts und lädt auch keine Anzeige.
+/// Dezenter Banner-Werbeplatz, nur in der Gratis-Version. Plätze: Statistik-Tab
+/// (Konzept Abschnitt 4/7) und der laufende Fokus-Modus (dorthin schaut man
+/// während der Session ohnehin nicht – stört also niemanden). Bei Premium
+/// rendert das Widget nichts und lädt auch keine Anzeige.
 class BannerAdSlot extends StatefulWidget {
   const BannerAdSlot({super.key});
 

@@ -1,3 +1,6 @@
+import '../models/exam.dart';
+import '../models/subject.dart';
+
 /// Zentrale Textbausteine (Deutsch, primaer).
 ///
 /// Alle sichtbaren Texte laufen ueber diese Klasse, damit spaeter leicht
@@ -281,9 +284,111 @@ class S {
   static const notifWarnBody =
       'Deine Pflanze verwelkt, wenn du nicht in 30 Sekunden zurückkommst.';
 
+  // Beste Lernzeit (pro Fach, für Lernplan & Erinnerungen)
+  static const learnTimeLabel = 'Beste Lernzeit';
+  static const learnTimeHint =
+      'Zu dieser Tageszeit erinnert dich der Lernplan an dieses Fach.';
+  static const learnMorgens = 'Morgens';
+  static const learnMittags = 'Mittags';
+  static const learnAbends = 'Abends';
+
+  // Prüfungstermine (pro Fach)
+  static const examsSectionLabel = 'Prüfungstermine';
+  static const examsHint =
+      'Der Lernplan erinnert dich rechtzeitig vor jedem Termin.';
+  static const examAddChip = 'Termin';
+  static const examAddTitle = 'Prüfung eintragen';
+  static const examKindLabel2 = 'Art der Prüfung';
+  static const examDateLabel = 'Datum';
+  static const examPickDate = 'Datum wählen';
+  static const examAddButton = 'Eintragen';
+  static const examRemoveTooltip = 'Termin entfernen';
+  static const examKindSchulaufgabe = 'Schulaufgabe';
+  static const examKindEx = 'Ex';
+  static const examKindKurzarbeit = 'Kurzarbeit';
+  static const examKindPraesentation = 'Präsentation';
+  static const examRatedPrefix = 'Lief'; // z. B. „Lief 7/10"
+
+  // Prüfungs-Feedback (nach dem Termin, 1–10)
+  static const examFeedbackTitle = 'Wie lief deine Prüfung?';
+  static const examFeedbackBody =
+      '{art} in {fach} am {datum} – wie lief es (1 = schlecht, 10 = super)?';
+  static const examFeedbackHint =
+      'Deine Antwort passt den Lernplan an: lief es schwer, plant er dieses Fach öfter ein.';
+  static const examFeedbackSave = 'Speichern';
+  static const examFeedbackLater = 'Später';
+  static const examFeedbackSkip = 'Ohne Bewertung';
+
+  // Lernplan
+  static const planTitle = 'Lernplan';
+  static const planEmpty =
+      'Trage bei deinen Fächern Prüfungstermine ein – dann plant Focus Garden, wann du wofür lernst.';
+  static const planToday = 'Heute';
+  static const planTomorrow = 'Morgen';
+  static const planExamToday = 'Prüfung!';
+  static const planDaysLeft = 'in {n} Tagen';
+  static const planExport = 'In Kalender';
+  static const planExportText =
+      'Mein Lernplan aus Focus Garden 🌱 – Datei öffnen, um die Termine in deinen Kalender zu übernehmen.';
+  static const planExportError = 'Export hat nicht geklappt.';
+  static const planReminders = 'Lern-Erinnerungen';
+  static const planRemindersHint =
+      'Tägliche Erinnerung zur besten Lernzeit des wichtigsten Fachs.';
+  static const planSuggestionPrefix = 'Heute dran:';
+
+  // Pausen-Empfehlung
+  static const breakTitle = 'Empfohlene Pause';
+  static const breakBodyShort =
+      '{n} Min frische Luft, Wasser trinken, kurz bewegen – dann läuft die nächste Session besser.';
+  static const breakBodyLong =
+      'Starke Leistung – Zeit für eine längere Pause ({n} Min). Dein Kopf braucht sie nach mehreren Sessions wirklich.';
+  static const breakStart = 'Pause starten';
+  static const breakRunning = 'Pause läuft …';
+  static const breakSkip = 'Ohne Pause weiter';
+  static const breakDone = 'Pause vorbei 🌱';
+
+  // Benachrichtigungen: Lernplan & Pause
+  static const notifStudyTitle = 'Zeit zum Lernen 📚';
+  static const notifStudyBody = '{fach}: {art} {wann} – eine Fokus-Session jetzt zahlt sich aus!';
+  static const notifExamTodayTitle = 'Heute: {art} in {fach}';
+  static const notifExamTodayBody = 'Viel Erfolg! 🍀 Du hast dafür gelernt.';
+  static const notifBreakOverTitle = 'Pause vorbei 🌱';
+  static const notifBreakOverBody =
+      'Frisch erholt? Starte deine nächste Fokus-Session.';
+
   static const weekdayShort = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
   static const monthNames = [
     'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
     'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
   ];
+
+  /// Anzeigename einer Prüfungs-Kategorie.
+  static String examKind(ExamKind kind) {
+    switch (kind) {
+      case ExamKind.schulaufgabe:
+        return examKindSchulaufgabe;
+      case ExamKind.ex:
+        return examKindEx;
+      case ExamKind.kurzarbeit:
+        return examKindKurzarbeit;
+      case ExamKind.praesentation:
+        return examKindPraesentation;
+    }
+  }
+
+  /// Anzeigename einer Lernzeit.
+  static String learnTime(LearnTime time) {
+    switch (time) {
+      case LearnTime.morgens:
+        return learnMorgens;
+      case LearnTime.mittags:
+        return learnMittags;
+      case LearnTime.abends:
+        return learnAbends;
+    }
+  }
+
+  /// Kurzes deutsches Datum „15.07." – für Chips, Plan und Dialoge.
+  static String shortDate(DateTime d) =>
+      '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.';
 }

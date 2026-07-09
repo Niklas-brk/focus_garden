@@ -9,6 +9,7 @@ import 'services/notification_service.dart';
 import 'services/purchase_service.dart';
 import 'services/sound_service.dart';
 import 'services/storage_service.dart';
+import 'services/study_plan_service.dart';
 import 'state/history_provider.dart';
 import 'state/session_provider.dart';
 import 'state/settings_provider.dart';
@@ -46,6 +47,24 @@ Future<void> main() async {
 
   // Der „Notfall-Abbruch"-Knopf im nativen Overlay endet die Session.
   blocker.setAbortHandler(session.cancelSession);
+
+  // Lernplan: Erinnerungen beim Start planen und bei jeder Fach-Änderung
+  // (neue Prüfung, Feedback, gelöschtes Fach …) neu berechnen.
+  final studyPlan = StudyPlanService(notifications);
+  Future<void> replan() => studyPlan.reschedule(
+        subjects.subjects,
+        enabled: settings.studyRemindersOn,
+      );
+  subjects.addListener(() => unawaited(replan()));
+  var remindersWereOn = settings.studyRemindersOn;
+  settings.addListener(() {
+    // Nur neu planen, wenn wirklich der Erinnerungs-Schalter umgelegt wurde.
+    if (settings.studyRemindersOn != remindersWereOn) {
+      remindersWereOn = settings.studyRemindersOn;
+      unawaited(replan());
+    }
+  });
+  unawaited(replan());
 
   // Kauf-Dienst: schaltet bei erfolgreichem Kauf/Wiederherstellung Premium frei.
   final purchases = PurchaseService(onPremiumUnlocked: settings.unlockPremium);

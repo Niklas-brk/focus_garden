@@ -5,6 +5,7 @@ import '../l10n/app_strings.dart';
 import '../state/session_provider.dart';
 import '../state/settings_provider.dart';
 import '../state/subject_provider.dart';
+import '../widgets/exam_feedback_dialog.dart';
 import 'focus/focus_screen.dart';
 import 'garden/garden_screen.dart';
 import 'grades/grades_screen.dart';
@@ -33,6 +34,12 @@ class _HomeShellState extends State<HomeShell> {
     // Fächer hat, startet wie gewohnt im Fokus-Tab.
     final hasSubjects = context.read<SubjectProvider>().subjects.isNotEmpty;
     _index = hasSubjects ? 0 : _gradesTab;
+
+    // Nach dem ersten Frame: abgelaufene Prüfungen abfragen („Wie lief es?").
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ExamFeedback.maybeAsk(context, context.read<SubjectProvider>());
+    });
   }
 
   void _openSettings() {

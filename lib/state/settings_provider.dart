@@ -22,6 +22,7 @@ class SettingsProvider extends ChangeNotifier {
   static const _kEduKind = 'eduKind';
   static const _kSchoolType = 'schoolType';
   static const _kStudiengang = 'studiengang';
+  static const _kStudyReminders = 'studyRemindersOn';
 
   static const defaultGardenName = 'Mein Garten';
 
@@ -46,6 +47,7 @@ class SettingsProvider extends ChangeNotifier {
   late EduKind _eduKind;
   late SchoolType _schoolType;
   late String _studiengang;
+  late bool _studyRemindersOn;
 
   SettingsProvider(this.storage) {
     _strictMode = storage.getBool(_kStrict, true); // Standard: streng
@@ -63,6 +65,7 @@ class SettingsProvider extends ChangeNotifier {
     _schoolType =
         _schoolTypeFromString(storage.getString(_kSchoolType, 'gymnasium'));
     _studiengang = storage.getString(_kStudiengang, '');
+    _studyRemindersOn = storage.getBool(_kStudyReminders, true);
   }
 
   bool get strictMode => _strictMode;
@@ -155,6 +158,16 @@ class SettingsProvider extends ChangeNotifier {
     if (text == _studiengang) return;
     _studiengang = text;
     storage.setString(_kStudiengang, text);
+    notifyListeners();
+  }
+
+  /// Ob der Lernplan tägliche Lern-Erinnerungen schicken darf.
+  bool get studyRemindersOn => _studyRemindersOn;
+
+  set studyRemindersOn(bool v) {
+    if (v == _studyRemindersOn) return;
+    _studyRemindersOn = v;
+    storage.setBool(_kStudyReminders, v);
     notifyListeners();
   }
 

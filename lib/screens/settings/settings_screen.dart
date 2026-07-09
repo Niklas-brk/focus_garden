@@ -88,6 +88,18 @@ class SettingsScreen extends StatelessWidget {
                   value: settings.hapticsOn,
                   onChanged: (v) => settings.hapticsOn = v,
                 ),
+                const Divider(height: 1),
+                SwitchListTile(
+                  title: const Text(S.planReminders),
+                  subtitle: Text(
+                    S.planRemindersHint,
+                    style: TextStyle(
+                        color: scheme.onSurface.withValues(alpha: 0.6),
+                        fontSize: 12),
+                  ),
+                  value: settings.studyRemindersOn,
+                  onChanged: (v) => settings.studyRemindersOn = v,
+                ),
               ],
             ),
           ),

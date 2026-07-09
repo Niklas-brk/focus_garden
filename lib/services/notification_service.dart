@@ -17,6 +17,12 @@ class NotificationService {
 
   static const int bloomId = 1;
   static const int warnId = 2;
+  static const int breakId = 3;
+
+  /// Lern-Erinnerungen des Lernplans belegen die IDs 100–115 (max. 2 pro Tag
+  /// für 7 geplante Tage: Lern-Erinnerung + „Viel Erfolg" am Prüfungstag).
+  static const int studyBaseId = 100;
+  static const int studyMaxCount = 16;
 
   static const _channelId = 'focus_garden_channel';
   static const _channelName = 'Focus Garden';
@@ -97,6 +103,55 @@ class NotificationService {
       );
     } catch (e) {
       debugPrint('showWiltWarning fehlgeschlagen: $e');
+    }
+  }
+
+  /// Plant die „Pause vorbei"-Meldung zum Ende der empfohlenen Pause.
+  Future<void> scheduleBreakEnd(DateTime when) async {
+    if (!_ready) return;
+    try {
+      await _plugin.zonedSchedule(
+        id: breakId,
+        scheduledDate: tz.TZDateTime.from(when, tz.local),
+        notificationDetails: _details,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        title: S.notifBreakOverTitle,
+        body: S.notifBreakOverBody,
+      );
+    } catch (e) {
+      debugPrint('scheduleBreakEnd fehlgeschlagen: $e');
+    }
+  }
+
+  Future<void> cancelBreakEnd() async => _plugin.cancel(id: breakId);
+
+  /// Plant die Lern-Erinnerungen des Lernplans neu: erst alle alten löschen,
+  /// dann die übergebenen (Zeitpunkt, Titel, Text) eintragen.
+  Future<void> scheduleStudyReminders(
+    List<(DateTime, String, String)> entries,
+  ) async {
+    if (!_ready) return;
+    await cancelStudyReminders();
+    for (var i = 0; i < entries.length && i < studyMaxCount; i++) {
+      final (time, title, body) = entries[i];
+      try {
+        await _plugin.zonedSchedule(
+          id: studyBaseId + i,
+          scheduledDate: tz.TZDateTime.from(time, tz.local),
+          notificationDetails: _details,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          title: title,
+          body: body,
+        );
+      } catch (e) {
+        debugPrint('scheduleStudyReminders fehlgeschlagen: $e');
+      }
+    }
+  }
+
+  Future<void> cancelStudyReminders() async {
+    for (var i = 0; i < studyMaxCount; i++) {
+      await _plugin.cancel(id: studyBaseId + i);
     }
   }
 

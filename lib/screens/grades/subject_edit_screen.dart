@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../l10n/app_strings.dart';
 import '../../models/edu_profile.dart';
+import '../../models/exam.dart';
 import '../../models/grade_entry.dart';
 import '../../models/plant.dart';
 import '../../models/plant_catalog.dart';
@@ -41,6 +42,10 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
   late List<GradeEntry> _grades;
   late Map<GradeKind, double> _weights;
 
+  // Lernplan: beste Lernzeit + Prüfungstermine.
+  late LearnTime _learnTime;
+  late List<Exam> _exams;
+
   String? _nameError;
   String? _gradeError; // nur Uni
 
@@ -56,6 +61,8 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
     _selectedPlantId = s?.plantId ?? PlantCatalog.free.first.id;
     _grades = List.of(s?.grades ?? const []);
     _weights = {...kDefaultGradeWeights, ...?s?.weights};
+    _learnTime = s?.learnTime ?? LearnTime.abends;
+    _exams = List.of(s?.exams ?? const []);
     _gradeController = TextEditingController(
       text: s?.finalGrade == null ? '' : _initialGradeText(s!.finalGrade!),
     );
@@ -121,6 +128,8 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
       grades: grades,
       weights: _weights,
       credits: credits,
+      learnTime: _learnTime,
+      exams: _exams,
     );
 
     final provider = context.read<SubjectProvider>();
@@ -187,6 +196,21 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
     setState(() => _weights[kind] = weight);
   }
 
+  // --- Prüfungstermine: hinzufügen ------------------------------------------
+
+  Future<void> _addExam() async {
+    final exam = await showDialog<Exam>(
+      context: context,
+      builder: (_) => const _AddExamDialog(),
+    );
+    if (exam == null) return;
+    setState(() {
+      _exams
+        ..add(exam)
+        ..sort((a, b) => a.date.compareTo(b.date));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();
@@ -242,6 +266,51 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
             onLockedTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const PremiumScreen()),
             ),
+          ),
+          const SizedBox(height: 20),
+
+          // --- Beste Lernzeit (für Lernplan & Erinnerungen) ------------------
+          _Label(S.learnTimeLabel),
+          SegmentedButton<LearnTime>(
+            segments: const [
+              ButtonSegment(
+                value: LearnTime.morgens,
+                label: Text(S.learnMorgens),
+                icon: Icon(Icons.wb_sunny_outlined),
+              ),
+              ButtonSegment(
+                value: LearnTime.mittags,
+                label: Text(S.learnMittags),
+                icon: Icon(Icons.light_mode_outlined),
+              ),
+              ButtonSegment(
+                value: LearnTime.abends,
+                label: Text(S.learnAbends),
+                icon: Icon(Icons.nights_stay_outlined),
+              ),
+            ],
+            selected: {_learnTime},
+            onSelectionChanged: (sel) =>
+                setState(() => _learnTime = sel.first),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2, top: 6),
+            child: Text(
+              S.learnTimeHint,
+              style: TextStyle(
+                fontSize: 12,
+                color: scheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // --- Prüfungstermine ----------------------------------------------
+          _Label(S.examsSectionLabel),
+          _ExamSection(
+            exams: _exams,
+            onAdd: _addExam,
+            onRemove: (e) => setState(() => _exams.remove(e)),
           ),
           const SizedBox(height: 20),
 
@@ -575,6 +644,161 @@ class _FinalGradeBadge extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Prüfungstermine: Liste + Dialog
+// ---------------------------------------------------------------------------
+
+/// Zeigt die eingetragenen Prüfungstermine als Chips (Datum + Art, ggf. mit
+/// Feedback „Lief 7/10") und den Hinzufügen-Knopf.
+class _ExamSection extends StatelessWidget {
+  final List<Exam> exams;
+  final VoidCallback onAdd;
+  final ValueChanged<Exam> onRemove;
+
+  const _ExamSection({
+    required this.exams,
+    required this.onAdd,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            S.examsHint,
+            style: TextStyle(
+              fontSize: 12,
+              color: scheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              for (final e in exams)
+                InputChip(
+                  label: Text(
+                    '${S.shortDate(e.date)} ${S.examKind(e.kind)}'
+                    '${e.rating != null ? ' · ${S.examRatedPrefix} ${e.rating}/10' : ''}',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onDeleted: () => onRemove(e),
+                  deleteIconColor: scheme.onSurface.withValues(alpha: 0.6),
+                  deleteButtonTooltipMessage: S.examRemoveTooltip,
+                  backgroundColor: scheme.tertiary.withValues(alpha: 0.12),
+                ),
+              ActionChip(
+                avatar: const Icon(Icons.event_rounded, size: 18),
+                label: const Text(S.examAddChip),
+                onPressed: onAdd,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Dialog: Prüfung eintragen (Art wählen + Datum picken).
+class _AddExamDialog extends StatefulWidget {
+  const _AddExamDialog();
+
+  @override
+  State<_AddExamDialog> createState() => _AddExamDialogState();
+}
+
+class _AddExamDialogState extends State<_AddExamDialog> {
+  ExamKind _kind = ExamKind.schulaufgabe;
+  DateTime? _date;
+
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _date ?? now,
+      // Auch (kurz) zurückliegende Termine erlauben – dann fragt die App
+      // direkt beim nächsten Start nach dem Feedback.
+      firstDate: now.subtract(const Duration(days: 90)),
+      lastDate: now.add(const Duration(days: 365)),
+    );
+    if (picked != null) setState(() => _date = picked);
+  }
+
+  void _submit() {
+    final date = _date;
+    if (date == null) return;
+    Navigator.of(context).pop(Exam(
+      id: 'exam_${DateTime.now().microsecondsSinceEpoch}',
+      date: date,
+      kind: _kind,
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text(S.examAddTitle),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(S.examKindLabel2,
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              for (final k in ExamKind.values)
+                ChoiceChip(
+                  label: Text(S.examKind(k)),
+                  selected: _kind == k,
+                  onSelected: (_) => setState(() => _kind = k),
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Text(S.examDateLabel,
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _pickDate,
+            icon: const Icon(Icons.calendar_month_rounded, size: 18),
+            label: Text(
+              _date == null
+                  ? S.examPickDate
+                  : '${S.shortDate(_date!)}${_date!.year}',
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text(S.cancel),
+        ),
+        FilledButton(
+          onPressed: _date == null ? null : _submit,
+          child: const Text(S.examAddButton),
+        ),
+      ],
     );
   }
 }

@@ -46,6 +46,9 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
   late LearnTime _learnTime;
   late List<Exam> _exams;
 
+  // Studium: gewähltes Studienfach des Moduls (null = ohne Fach).
+  String? _studienfach;
+
   String? _nameError;
   String? _gradeError; // nur Uni
 
@@ -63,6 +66,7 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
     _weights = {...kDefaultGradeWeights, ...?s?.weights};
     _learnTime = s?.learnTime ?? LearnTime.abends;
     _exams = List.of(s?.exams ?? const []);
+    _studienfach = s?.studienfach;
     _gradeController = TextEditingController(
       text: s?.finalGrade == null ? '' : _initialGradeText(s!.finalGrade!),
     );
@@ -128,6 +132,7 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
       grades: grades,
       weights: _weights,
       credits: credits,
+      studienfach: isUni ? _studienfach : existing?.studienfach,
       learnTime: _learnTime,
       exams: _exams,
     );
@@ -199,9 +204,11 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
   // --- Prüfungstermine: hinzufügen ------------------------------------------
 
   Future<void> _addExam() async {
+    final isUni =
+        context.read<SettingsProvider>().gradingSystem == GradingSystem.uni;
     final exam = await showDialog<Exam>(
       context: context,
-      builder: (_) => const _AddExamDialog(),
+      builder: (_) => _AddExamDialog(isUni: isUni),
     );
     if (exam == null) return;
     setState(() {
@@ -254,6 +261,29 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
             },
           ),
           const SizedBox(height: 20),
+
+          // --- Studienfach (nur Studium, wenn Fächer im Profil angelegt) ----
+          if (isUni && _fachChoices(settings).isNotEmpty) ...[
+            _Label(S.studienfachLabel),
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                ChoiceChip(
+                  label: const Text(S.studienfachNone),
+                  selected: _studienfach == null,
+                  onSelected: (_) => setState(() => _studienfach = null),
+                ),
+                for (final fach in _fachChoices(settings))
+                  ChoiceChip(
+                    label: Text(fach),
+                    selected: _studienfach == fach,
+                    onSelected: (_) => setState(() => _studienfach = fach),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+          ],
 
           // --- Pflanze -----------------------------------------------------
           _Label(S.subjectPlantLabel),
@@ -331,6 +361,16 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
         ],
       ),
     );
+  }
+
+  /// Wählbare Studienfächer: die im Profil angelegten, plus – falls dieses
+  /// Modul noch einem inzwischen entfernten Fach zugeordnet ist – dieses Fach,
+  /// damit die Auswahl sichtbar bleibt.
+  List<String> _fachChoices(SettingsProvider settings) {
+    final choices = List.of(settings.studienfaecher);
+    final current = _studienfach;
+    if (current != null && !choices.contains(current)) choices.add(current);
+    return choices;
   }
 
   // --- Uni: eine Modulnote + ECTS -------------------------------------------
@@ -716,17 +756,24 @@ class _ExamSection extends StatelessWidget {
   }
 }
 
-/// Dialog: Prüfung eintragen (Art wählen + Datum picken).
+/// Dialog: Prüfung eintragen (Art wählen + Datum picken). Studenten sehen
+/// Uni-Prüfungsarten (Klausur, Präsentation), Schüler:innen die schulischen.
 class _AddExamDialog extends StatefulWidget {
-  const _AddExamDialog();
+  final bool isUni;
+
+  const _AddExamDialog({required this.isUni});
 
   @override
   State<_AddExamDialog> createState() => _AddExamDialogState();
 }
 
 class _AddExamDialogState extends State<_AddExamDialog> {
-  ExamKind _kind = ExamKind.schulaufgabe;
+  late ExamKind _kind =
+      widget.isUni ? ExamKind.klausur : ExamKind.schulaufgabe;
   DateTime? _date;
+
+  List<ExamKind> get _kinds =>
+      widget.isUni ? kUniExamKinds : kSchoolExamKinds;
 
   Future<void> _pickDate() async {
     final now = DateTime.now();
@@ -766,7 +813,7 @@ class _AddExamDialogState extends State<_AddExamDialog> {
             spacing: 8,
             runSpacing: 4,
             children: [
-              for (final k in ExamKind.values)
+              for (final k in _kinds)
                 ChoiceChip(
                   label: Text(S.examKind(k)),
                   selected: _kind == k,

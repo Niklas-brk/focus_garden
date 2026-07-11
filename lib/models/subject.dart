@@ -7,7 +7,9 @@ enum LearnTime { morgens, mittags, abends }
 
 /// Ein Fach (Schule) bzw. Modul (Studium). Trägt Name, gewählte Pflanze, die
 /// eingetragenen Einzelnoten [grades] samt Gewichtung [weights] und – bei
-/// Studenten – die ECTS-Punkte. Zusätzlich den Blüh-Fortschritt: [bloomProgress]
+/// Studenten – die ECTS-Punkte sowie optional das übergeordnete [studienfach]
+/// (z. B. „Deutsch" bei Lehramt mit mehreren Fächern; null = keins gewählt).
+/// Zusätzlich den Blüh-Fortschritt: [bloomProgress]
 /// sind Fokusminuten Richtung der aktuellen Blüte, [bloomedCount] zählt die
 /// schon vollendeten Blüten (Phase 2). Für den Lernplan: die bevorzugte
 /// [learnTime] und die [exams] (Prüfungstermine mit Nachher-Feedback).
@@ -23,6 +25,7 @@ class Subject {
   final List<GradeEntry> grades; // einzelne Noten (nach Art)
   final Map<GradeKind, double> weights; // Gewicht je Noten-Art
   final int? credits; // ECTS (nur Studium)
+  final String? studienfach; // Studienfach des Moduls (nur Studium, optional)
   final LearnTime learnTime; // beste Lernzeit für dieses Fach
   final List<Exam> exams; // Prüfungstermine
 
@@ -35,6 +38,7 @@ class Subject {
     List<GradeEntry>? grades,
     Map<GradeKind, double>? weights,
     this.credits,
+    this.studienfach,
     this.learnTime = LearnTime.abends,
     List<Exam>? exams,
   })  : grades = grades ?? const [],
@@ -97,6 +101,8 @@ class Subject {
     List<GradeEntry>? grades,
     Map<GradeKind, double>? weights,
     int? credits,
+    String? studienfach,
+    bool clearStudienfach = false,
     LearnTime? learnTime,
     List<Exam>? exams,
   }) {
@@ -109,6 +115,8 @@ class Subject {
       grades: grades ?? this.grades,
       weights: weights ?? this.weights,
       credits: credits ?? this.credits,
+      // null heißt hier „unverändert" – Löschen geht über [clearStudienfach].
+      studienfach: clearStudienfach ? null : (studienfach ?? this.studienfach),
       learnTime: learnTime ?? this.learnTime,
       exams: exams ?? this.exams,
     );
@@ -125,6 +133,7 @@ class Subject {
           for (final e in weights.entries) e.key.name: e.value,
         },
         'credits': credits,
+        'studienfach': studienfach,
         'learnTime': learnTime.name,
         'exams': exams.map((e) => e.toMap()).toList(),
       };
@@ -139,6 +148,7 @@ class Subject {
         weights: _weightsFromMap(m['weights']),
         credits: m['credits'] as int?,
         // Migration: alte Fächer haben die Felder noch nicht -> Standardwerte.
+        studienfach: m['studienfach'] as String?,
         learnTime: _learnTimeFromName(m['learnTime'] as String?),
         exams: _examsFromMap(m['exams']),
       );

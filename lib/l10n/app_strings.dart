@@ -160,8 +160,29 @@ class S {
   static const schoolRealschule = 'Realschule';
   static const schoolHauptschule = 'Hauptschule';
   static const schoolGesamtschule = 'Gesamtschule';
+  static const schoolFachschule = 'Fachschule';
   static const studiengangLabel = 'Studiengang';
   static const studiengangHint = 'z. B. Informatik B.Sc.';
+  // Studienfächer (z. B. Lehramt: Deutsch + Reli, je mit eigenen Klausuren)
+  static const studienfaecherLabel = 'Studienfächer (optional)';
+  static const studienfaecherHint =
+      'Studierst du mehrere Fächer (z. B. Lehramt)? Lege sie hier an und '
+      'ordne jedes Modul einem Fach zu. Antippen benennt ein Fach um.';
+  static const studienfachAddChip = 'Fach';
+  static const studienfachAddTitle = 'Studienfach hinzufügen';
+  static const studienfachAddHint = 'z. B. Deutsch';
+  static const studienfachAddButton = 'Hinzufügen';
+  static const studienfachRenameTitle = 'Fach umbenennen';
+  static const studienfachRenameButton = 'Speichern';
+  static const studienfachDuplicate = 'Dieses Fach gibt es schon.';
+  static const studienfachRemoveTooltip = 'Fach entfernen';
+  static const studienfachRemoveTitle = 'Fach entfernen?';
+  static const studienfachRemoveBody =
+      'Die zugeordneten Module und ihre Noten bleiben erhalten – sie stehen '
+      'danach unter „Ohne Fach".';
+  static const studienfachLabel = 'Studienfach';
+  static const studienfachNone = 'Ohne Fach';
+  static const studienfachEmptyGroup = 'Noch keine Module in diesem Fach.';
   static const gradingHintPunkte = 'Bewertung in Punkten (0–15).';
   static const gradingHintNoten = 'Bewertung in Noten (1–6).';
   static const gradingHintUni = 'Uni-Noten (1,0–5,0), ECTS-gewichtet.';
@@ -304,6 +325,7 @@ class S {
   static const examAddButton = 'Eintragen';
   static const examRemoveTooltip = 'Termin entfernen';
   static const examKindSchulaufgabe = 'Schulaufgabe';
+  static const examKindKlausur = 'Klausur';
   static const examKindEx = 'Ex';
   static const examKindKurzarbeit = 'Kurzarbeit';
   static const examKindPraesentation = 'Präsentation';
@@ -367,6 +389,8 @@ class S {
     switch (kind) {
       case ExamKind.schulaufgabe:
         return examKindSchulaufgabe;
+      case ExamKind.klausur:
+        return examKindKlausur;
       case ExamKind.ex:
         return examKindEx;
       case ExamKind.kurzarbeit:

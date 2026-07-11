@@ -4,7 +4,10 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 
+import 'package:focus_garden/models/subject.dart';
 import 'package:focus_garden/services/storage_service.dart';
+import 'package:focus_garden/state/settings_provider.dart';
+import 'package:focus_garden/state/subject_provider.dart';
 
 /// Test-Ersatz fuer den Android Keystore: merkt sich Geheimnisse im RAM.
 class FakeSecretStore implements SecretStore {
@@ -98,5 +101,39 @@ void main() {
     await storage2.init(testPath: tempDir.path);
     expect(storage2.allSessions().length, 2);
     expect(storage2.getString('gardenName', ''), 'Alter Garten');
+  });
+
+  test('Studienfaecher: ueberstehen Neustart, Umbenennen zieht Module mit',
+      () async {
+    final secrets = FakeSecretStore();
+    final storage = StorageService(secrets: secrets);
+    await storage.init(testPath: tempDir.path);
+
+    final settings = SettingsProvider(storage);
+    expect(settings.studienfaecher, isEmpty);
+    expect(settings.addStudienfach('Deutsch'), isTrue);
+    expect(settings.addStudienfach('deutsch'), isFalse); // Duplikat, Case egal
+    expect(settings.addStudienfach('Reli'), isTrue);
+
+    final subjects = SubjectProvider(storage);
+    await subjects.add(Subject(
+      id: 'm1',
+      name: 'Dogmatik',
+      plantId: 'p01',
+      studienfach: 'Reli',
+    ));
+
+    // Umbenennen: Profil-Liste und Modul-Zuordnung wandern gemeinsam.
+    expect(settings.renameStudienfach('Reli', 'Religion'), isTrue);
+    expect(settings.renameStudienfach('Deutsch', 'religion'), isFalse);
+    await subjects.renameStudienfach('Reli', 'Religion');
+    expect(subjects.byStudienfach('Religion').length, 1);
+
+    // "Neustart": alles kommt aus Hive zurueck.
+    await Hive.close();
+    final storage2 = StorageService(secrets: secrets);
+    await storage2.init(testPath: tempDir.path);
+    expect(SettingsProvider(storage2).studienfaecher, ['Deutsch', 'Religion']);
+    expect(storage2.allSubjects().single.studienfach, 'Religion');
   });
 }

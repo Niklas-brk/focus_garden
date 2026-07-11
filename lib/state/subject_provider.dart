@@ -52,6 +52,32 @@ class SubjectProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Alle Module, die diesem Studienfach zugeordnet sind (nur Studium).
+  List<Subject> byStudienfach(String fach) =>
+      _subjects.where((s) => s.studienfach == fach).toList();
+
+  /// Löst die Zuordnung aller Module zu [fach] (wenn das Studienfach aus dem
+  /// Profil entfernt wird). Die Module samt Noten bleiben erhalten.
+  Future<void> clearStudienfach(String fach) async {
+    for (var i = 0; i < _subjects.length; i++) {
+      if (_subjects[i].studienfach != fach) continue;
+      _subjects[i] = _subjects[i].copyWith(clearStudienfach: true);
+      await storage.putSubject(_subjects[i].toMap());
+    }
+    notifyListeners();
+  }
+
+  /// Zieht die Modul-Zuordnungen beim Umbenennen eines Studienfachs nach:
+  /// alle Module von [from] hängen danach an [to].
+  Future<void> renameStudienfach(String from, String to) async {
+    for (var i = 0; i < _subjects.length; i++) {
+      if (_subjects[i].studienfach != from) continue;
+      _subjects[i] = _subjects[i].copyWith(studienfach: to);
+      await storage.putSubject(_subjects[i].toMap());
+    }
+    notifyListeners();
+  }
+
   /// Für Phase 2 vorbereitet: schreibt Fokusminuten dem Blüh-Fortschritt des
   /// Fachs gut. Die eigentliche Blüh-Auswertung (Übertrag ab 120 min) baut
   /// Phase 2 im SessionProvider darauf auf.

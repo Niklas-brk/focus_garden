@@ -127,6 +127,19 @@ void main() {
         greaterThan(StudyPlan.scoreFor(goodFeedback, today)));
   });
 
+  test('Klausur (Uni) zählt wie eine Schulaufgabe: 14 Tage Vorlauf, Gewicht 3',
+      () {
+    expect(kExamLeadDays[ExamKind.klausur], 14);
+    expect(kExamWeights[ExamKind.klausur], kExamWeights[ExamKind.schulaufgabe]);
+    // In 14 Tagen schon im Plan, in 15 noch nicht.
+    final inLead = subj('Reli',
+        exams: [exam(ExamKind.klausur, today.add(const Duration(days: 14)))]);
+    expect(StudyPlan.scoreFor(inLead, today), greaterThan(0));
+    final tooFar = subj('Deutsch',
+        exams: [exam(ExamKind.klausur, today.add(const Duration(days: 15)))]);
+    expect(StudyPlan.scoreFor(tooFar, today), 0);
+  });
+
   test('build: Prüfungstag landet in examsToday, sonst in Empfehlungen', () {
     final s = subj('Mathe',
         exams: [exam(ExamKind.schulaufgabe, today.add(const Duration(days: 2)))]);
@@ -188,6 +201,24 @@ void main() {
     final s = Subject.fromMap(old);
     expect(s.learnTime, LearnTime.abends);
     expect(s.exams, isEmpty);
+    expect(s.studienfach, isNull); // vor dem Studienfächer-Update angelegt
+  });
+
+  test('Studienfach übersteht die Map-Runde und lässt sich wieder lösen', () {
+    final modul = Subject(
+      id: 'm1',
+      name: 'Literaturwissenschaft',
+      plantId: 'p01',
+      studienfach: 'Deutsch',
+    );
+    final restored = Subject.fromMap(modul.toMap());
+    expect(restored.studienfach, 'Deutsch');
+
+    // copyWith ohne Angabe behält das Fach, clearStudienfach entfernt es.
+    expect(restored.copyWith(name: 'Neu').studienfach, 'Deutsch');
+    final cleared = restored.copyWith(clearStudienfach: true);
+    expect(cleared.studienfach, isNull);
+    expect(Subject.fromMap(cleared.toMap()).studienfach, isNull);
   });
 
   // ---- Kalender-Export -----------------------------------------------------------

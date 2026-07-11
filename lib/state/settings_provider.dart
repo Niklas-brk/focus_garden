@@ -22,6 +22,7 @@ class SettingsProvider extends ChangeNotifier {
   static const _kEduKind = 'eduKind';
   static const _kSchoolType = 'schoolType';
   static const _kStudiengang = 'studiengang';
+  static const _kStudienfaecher = 'studienfaecher';
   static const _kStudyReminders = 'studyRemindersOn';
 
   static const defaultGardenName = 'Mein Garten';
@@ -47,6 +48,7 @@ class SettingsProvider extends ChangeNotifier {
   late EduKind _eduKind;
   late SchoolType _schoolType;
   late String _studiengang;
+  late List<String> _studienfaecher;
   late bool _studyRemindersOn;
 
   SettingsProvider(this.storage) {
@@ -65,6 +67,7 @@ class SettingsProvider extends ChangeNotifier {
     _schoolType =
         _schoolTypeFromString(storage.getString(_kSchoolType, 'gymnasium'));
     _studiengang = storage.getString(_kStudiengang, '');
+    _studienfaecher = List.of(storage.getStringList(_kStudienfaecher));
     _studyRemindersOn = storage.getBool(_kStudyReminders, true);
   }
 
@@ -158,6 +161,50 @@ class SettingsProvider extends ChangeNotifier {
     if (text == _studiengang) return;
     _studiengang = text;
     storage.setString(_kStudiengang, text);
+    notifyListeners();
+  }
+
+  /// Studienfächer des Nutzers (nur Student:innen, optional). Wer wie beim
+  /// Lehramt mehrere Fächer studiert (z. B. Deutsch + Reli), legt sie hier an
+  /// und ordnet dann jedes Modul einem Fach zu.
+  List<String> get studienfaecher => List.unmodifiable(_studienfaecher);
+
+  /// Fügt ein Studienfach hinzu. Leere Eingaben und Duplikate (unabhängig von
+  /// Groß-/Kleinschreibung) werden ignoriert. Liefert true bei Erfolg.
+  bool addStudienfach(String name) {
+    final text = name.trim();
+    if (text.isEmpty) return false;
+    final exists = _studienfaecher
+        .any((f) => f.toLowerCase() == text.toLowerCase());
+    if (exists) return false;
+    _studienfaecher.add(text);
+    storage.setStringList(_kStudienfaecher, _studienfaecher);
+    notifyListeners();
+    return true;
+  }
+
+  /// Benennt ein Studienfach um (z. B. Tippfehler „Reli" → „Religion").
+  /// Die Modul-Zuordnungen zieht der Aufrufer über den SubjectProvider nach.
+  /// Liefert false, wenn [from] fehlt oder [to] leer/schon vergeben ist.
+  bool renameStudienfach(String from, String to) {
+    final text = to.trim();
+    final i = _studienfaecher.indexOf(from);
+    if (i == -1 || text.isEmpty) return false;
+    if (text == from) return true; // nichts zu tun
+    final duplicate = _studienfaecher
+        .any((f) => f != from && f.toLowerCase() == text.toLowerCase());
+    if (duplicate) return false;
+    _studienfaecher[i] = text;
+    storage.setStringList(_kStudienfaecher, _studienfaecher);
+    notifyListeners();
+    return true;
+  }
+
+  /// Entfernt ein Studienfach aus dem Profil. Die Zuordnung der Module löst
+  /// der Aufrufer über den SubjectProvider (Noten bleiben erhalten).
+  void removeStudienfach(String name) {
+    if (!_studienfaecher.remove(name)) return;
+    storage.setStringList(_kStudienfaecher, _studienfaecher);
     notifyListeners();
   }
 

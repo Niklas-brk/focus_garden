@@ -5,8 +5,8 @@
 enum EduKind { schuelerin, studentin }
 
 /// Schulart (nur relevant, wenn [EduKind.schuelerin]). Gymnasium rechnet in
-/// Punkten (0–15), alle anderen in Noten (1–6).
-enum SchoolType { gymnasium, realschule, hauptschule, gesamtschule }
+/// Punkten (0–15), alle anderen in Noten (1–6) – auch die Fachschule.
+enum SchoolType { gymnasium, realschule, hauptschule, gesamtschule, fachschule }
 
 /// Das aktive Bewertungssystem.
 /// - [punkte]: 0–15 Punkte, höher ist besser (Gymnasium/Oberstufe).

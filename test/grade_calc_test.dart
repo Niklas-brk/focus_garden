@@ -33,6 +33,8 @@ void main() {
         GradingSystem.punkte);
     expect(gradingFor(EduKind.schuelerin, SchoolType.realschule),
         GradingSystem.noten);
+    expect(gradingFor(EduKind.schuelerin, SchoolType.fachschule),
+        GradingSystem.noten);
     expect(gradingFor(EduKind.studentin, SchoolType.gymnasium),
         GradingSystem.uni);
   });

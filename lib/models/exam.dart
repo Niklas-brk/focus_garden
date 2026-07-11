@@ -4,12 +4,27 @@
 // wird künftig stärker priorisiert).
 
 /// Kategorie einer Prüfung. Bestimmt, wie früh und wie stark der Lernplan
-/// das Fach vor dem Termin priorisiert (Schulaufgabe am stärksten).
-enum ExamKind { schulaufgabe, kurzarbeit, ex, praesentation }
+/// das Fach vor dem Termin priorisiert (Schulaufgabe/Klausur am stärksten).
+/// [klausur] ist die große Prüfung an Uni/Oberstufe außerhalb Bayerns.
+enum ExamKind { schulaufgabe, klausur, kurzarbeit, ex, praesentation }
+
+/// Welche Prüfungsarten im Termin-Dialog angeboten werden.
+const List<ExamKind> kSchoolExamKinds = [
+  ExamKind.schulaufgabe,
+  ExamKind.klausur,
+  ExamKind.kurzarbeit,
+  ExamKind.ex,
+  ExamKind.praesentation,
+];
+const List<ExamKind> kUniExamKinds = [
+  ExamKind.klausur,
+  ExamKind.praesentation,
+];
 
 /// Wie viele Tage vor dem Termin der Lernplan mit diesem Fach beginnt.
 const Map<ExamKind, int> kExamLeadDays = {
   ExamKind.schulaufgabe: 14,
+  ExamKind.klausur: 14,
   ExamKind.kurzarbeit: 7,
   ExamKind.ex: 5,
   ExamKind.praesentation: 10,
@@ -18,6 +33,7 @@ const Map<ExamKind, int> kExamLeadDays = {
 /// Grund-Gewicht einer Kategorie im Lernplan (größere Prüfung = wichtiger).
 const Map<ExamKind, double> kExamWeights = {
   ExamKind.schulaufgabe: 3.0,
+  ExamKind.klausur: 3.0,
   ExamKind.kurzarbeit: 2.0,
   ExamKind.ex: 1.5,
   ExamKind.praesentation: 2.0,

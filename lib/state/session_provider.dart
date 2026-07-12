@@ -226,6 +226,9 @@ class SessionProvider extends ChangeNotifier {
     blocker.hideShield(); // Session vorbei -> ggf. Schild schließen
 
     await storage.clearActive();
+    // Eine evtl. noch sichtbare Verwelk-Warnung ist jetzt gegenstandslos
+    // (z. B. nach Prozess-Kill während der Gnadenfrist).
+    await notifications.cancelWarning();
 
     final subject = selectedSubject;
     if (subject == null) {
@@ -357,7 +360,9 @@ class SessionProvider extends ChangeNotifier {
       // Timer war beim Start der App bereits abgelaufen -> auflösen.
       _finishSuccess(fromForeground: false);
     } else {
-      // Session lief noch -> fortsetzen.
+      // Session lief noch -> fortsetzen. Eine vor dem Prozess-Kill gezeigte
+      // Verwelk-Warnung wäre jetzt irreführend.
+      notifications.cancelWarning();
       _phase = FocusPhase.running;
       _willBloom = (selectedSubject?.bloomProgress ?? 0) + _selectedMinutes >=
           bloomTargetMinutes;

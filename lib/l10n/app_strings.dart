@@ -404,6 +404,59 @@ class S {
   static String notifBreakOverBody =
       'Frisch erholt? Starte deine nächste Fokus-Session.';
 
+  // Lerntipps (fachspezifisch, Kategorie-Erkennung in utils/study_tips.dart)
+  static String tipTitle = 'Lerntipp';
+  static String tipNext = 'Nächster Tipp';
+  static List<String> tipsMath = [
+    'Mathe lernst du durch Rechnen, nicht durch Lesen – löse Aufgaben, ohne die Lösung daneben zu haben.',
+    'Rechne alte Prüfungen unter Zeitdruck – so übst du genau den Ernstfall.',
+    'Verstehst du eine Musterlösung, deck sie zu und rechne die Aufgabe direkt nochmal allein.',
+    'Führe eine Fehlerliste: Jeder Fehler bekommt eine Zeile – vor der Prüfung gehst du nur noch die Liste durch.',
+    'Hängst du fest, wechsle die Darstellung: Skizze zeichnen, Zahlen einsetzen, kleines Beispiel bauen.',
+  ];
+  static List<String> tipsGerman = [
+    'Fasse jeden gelesenen Abschnitt in einem Satz zusammen – das ist die halbe Analyse.',
+    'Übe Aufsätze mit Gliederung: erst Stichpunkte für Einleitung, Hauptteil und Schluss – dann schreiben.',
+    'Lerne Fachbegriffe (Metapher, Ironie, Parallelismus …) mit einem eigenen Beispiel statt nur der Definition.',
+    'Belege jede Aussage am Text: Behauptung, Zitat, Erklärung – dieses Muster bringt die Punkte.',
+    'Lies deinen Übungsaufsatz einen Tag später laut – so findest du Stil- und Logikfehler selbst.',
+  ];
+  static List<String> tipsLanguage = [
+    'Vokabeln in kleinen Portionen: 10 pro Tag schlagen 70 am Sonntag.',
+    'Lerne Vokabeln in ganzen Sätzen und in beide Richtungen – dann sitzen sie auch im Aufsatz.',
+    'Schau Serien oder Videos in der Sprache mit Untertiteln – Hörverstehen trainiert sich nebenbei.',
+    'Sprich laut, auch mit dir selbst – eine Sprache lernst du durchs Benutzen.',
+    'Schreibe kurze Texte (Tagebuch, Chat-Nachrichten) und baue neue Vokabeln sofort ein.',
+  ];
+  static List<String> tipsScience = [
+    'Zeichne den Stoff: Skizzen, Kreisläufe und Diagramme bleiben besser hängen als Fließtext.',
+    'Formeln nicht nur auswendig lernen – rechne zu jeder ein Beispiel, dann kannst du sie anwenden.',
+    'Erkläre Experimente in drei Schritten: Aufbau, Beobachtung, Erklärung – genau so fragt die Prüfung.',
+    'Lerne Fachbegriffe wie Vokabeln – oft scheitert es an der Sprache, nicht am Verständnis.',
+    'Suche den Alltagsbezug: Wer erklären kann, warum die Scheibe beschlägt, hat den Stoff verstanden.',
+  ];
+  static List<String> tipsSociety = [
+    'Baue Zeitstrahlen und Schaubilder – Zusammenhänge zählen mehr als Jahreszahlen.',
+    'Stelle zu jedem Thema drei Fragen: Ursachen? Verlauf? Folgen? Das ist dein Grundgerüst.',
+    'Erkläre das Thema in zwei Minuten wie eine Mini-Doku – was du erzählen kannst, sitzt.',
+    'Übe Quellenarbeit: Wer schreibt hier, wann und mit welcher Absicht?',
+    'Verknüpfe den Stoff mit aktuellen Nachrichten – Transferfragen lieben Beispiele.',
+  ];
+  static List<String> tipsInformatics = [
+    'Programmieren lernst du durch Tippen: Übernimm Beispiele und verändere sie, bis du sie verstehst.',
+    'Baue kleine eigene Projekte – ein Mini-Spiel lehrt mehr als drei Tutorials.',
+    'Erkläre deinen Code Zeile für Zeile laut (Rubber-Duck-Methode) – Denkfehler fallen sofort auf.',
+    'Skizziere den Ablauf erst auf Papier oder als Pseudocode, dann tippe ihn.',
+    'Lies Fehlermeldungen bis zum Ende und stelle eine Vermutung auf, bevor du etwas änderst.',
+  ];
+  static List<String> tipsGeneral = [
+    'Erkläre den Stoff laut in eigenen Worten – was du erklären kannst, hast du verstanden.',
+    'Teste dich selbst statt nur zu lesen: Abfragen bringt mehr als Markieren.',
+    'Wiederhole mit Abstand: heute, morgen, nächste Woche – so wandert der Stoff ins Langzeitgedächtnis.',
+    'Leg das Handy in einen anderen Raum – allein die Sichtbarkeit kostet Konzentration.',
+    'Starte mit der schwersten Aufgabe, solange dein Kopf frisch ist.',
+  ];
+
   static List<String> weekdayShort = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
   static List<String> monthNames = [
     'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
@@ -785,6 +838,58 @@ class S {
     notifExamTodayBody = 'Good luck! 🍀 You studied for this.';
     notifBreakOverTitle = 'Break’s over 🌱';
     notifBreakOverBody = 'Refreshed? Start your next focus session.';
+
+    tipTitle = 'Study tip';
+    tipNext = 'Next tip';
+    tipsMath = [
+      'You learn math by solving, not by reading – work through problems without the solution next to you.',
+      'Do old exams under time pressure – it’s the closest thing to the real test.',
+      'Once you understand a worked solution, cover it and solve the same problem again on your own.',
+      'Keep an error list: every mistake gets one line – before the exam, practice only from that list.',
+      'Stuck? Change the representation: draw a sketch, plug in numbers, build a small example.',
+    ];
+    tipsGerman = [
+      'Summarize every section you read in one sentence – that is half the analysis.',
+      'Practice essays with an outline: bullet points for intro, body and conclusion first – then write.',
+      'Learn literary terms (metaphor, irony, parallelism …) with your own example instead of just the definition.',
+      'Back up every claim with the text: statement, quote, explanation – that pattern earns you points.',
+      'Read your practice essay out loud a day later – you will catch style and logic issues yourself.',
+    ];
+    tipsLanguage = [
+      'Vocabulary in small doses: 10 words a day beat 70 on Sunday.',
+      'Learn vocabulary in full sentences and in both directions – then it works in essays too.',
+      'Watch shows or videos in the language with subtitles – your listening improves along the way.',
+      'Speak out loud, even to yourself – you learn a language by using it.',
+      'Write short texts (a diary, chat messages) and use new words right away.',
+    ];
+    tipsScience = [
+      'Draw the material: sketches, cycles and diagrams stick better than plain text.',
+      'Don’t just memorize formulas – work an example for each one, then you can apply it.',
+      'Explain experiments in three steps: setup, observation, explanation – exams ask exactly that.',
+      'Learn technical terms like vocabulary – many points are lost to language, not understanding.',
+      'Find everyday connections: if you can explain why a window fogs up, you really understand the topic.',
+    ];
+    tipsSociety = [
+      'Build timelines and diagrams – connections matter more than dates.',
+      'Ask three questions about every topic: causes? course? consequences? That is your framework.',
+      'Explain the topic in two minutes like a mini documentary – if you can retell it, you know it.',
+      'Practice source analysis: who is writing, when, and with what intention?',
+      'Link the material to current news – transfer questions love examples.',
+    ];
+    tipsInformatics = [
+      'You learn coding by typing: take examples and change them until you understand them.',
+      'Build small projects of your own – one mini game teaches more than three tutorials.',
+      'Explain your code line by line out loud (rubber duck method) – logic errors surface fast.',
+      'Sketch the flow on paper or as pseudocode first, then type it.',
+      'Read error messages to the end and form a hypothesis before changing anything.',
+    ];
+    tipsGeneral = [
+      'Explain the material out loud in your own words – what you can explain, you understand.',
+      'Test yourself instead of rereading: active recall beats highlighting.',
+      'Space your reviews: today, tomorrow, next week – that moves knowledge into long-term memory.',
+      'Put your phone in another room – just seeing it costs focus.',
+      'Start with the hardest task while your mind is fresh.',
+    ];
 
     weekdayShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     monthNames = [

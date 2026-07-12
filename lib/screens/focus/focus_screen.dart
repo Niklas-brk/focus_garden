@@ -13,6 +13,7 @@ import '../../widgets/break_timer_card.dart';
 import '../../widgets/confetti_overlay.dart';
 import '../../widgets/duration_selector.dart';
 import '../../widgets/plant_sprite.dart';
+import '../../widgets/study_tip_card.dart';
 import '../../widgets/subject_picker.dart';
 import 'active_session_screen.dart';
 
@@ -106,6 +107,9 @@ class _FocusSetup extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 20),
+          // Fachspezifischer Lerntipp zum gewählten Fach (rotiert täglich).
+          StudyTipCard(subjectName: selected.name),
         ],
       ),
     );

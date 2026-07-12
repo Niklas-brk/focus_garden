@@ -78,14 +78,14 @@ class _FocusSetup extends StatelessWidget {
                 onPressed: () => session.selectSubject(today.subject),
               ),
             ),
-          const _SectionLabel(S.chooseSubject),
+          _SectionLabel(S.chooseSubject),
           SubjectCarousel(
             subjects: subjects,
             selectedId: selected.id,
             onSelected: session.selectSubject,
           ),
           const SizedBox(height: 20),
-          const _SectionLabel(S.chooseDuration),
+          _SectionLabel(S.chooseDuration),
           const SizedBox(height: 8),
           DurationSelector(
             selected: session.selectedMinutes,
@@ -98,9 +98,9 @@ class _FocusSetup extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.play_arrow_rounded),
-                  SizedBox(width: 8),
+                children: [
+                  const Icon(Icons.play_arrow_rounded),
+                  const SizedBox(width: 8),
                   Text(S.start),
                 ],
               ),

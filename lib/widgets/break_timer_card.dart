@@ -108,7 +108,7 @@ class _BreakTimerCardState extends State<BreakTimerCard> {
             OutlinedButton.icon(
               onPressed: _start,
               icon: const Icon(Icons.free_breakfast_rounded, size: 18),
-              label: const Text(S.breakStart),
+              label: Text(S.breakStart),
             ),
           ] else if (!_done) ...[
             const SizedBox(height: 8),

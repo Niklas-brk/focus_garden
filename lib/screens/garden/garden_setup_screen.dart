@@ -83,14 +83,14 @@ class _GardenSetupScreenState extends State<GardenSetupScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(S.gardenSetupTitle),
+        title: Text(S.gardenSetupTitle),
         actions: [
           TextButton(
             onPressed: () {
               _saveName();
               Navigator.of(context).pop();
             },
-            child: const Text(S.save),
+            child: Text(S.save),
           ),
         ],
       ),
@@ -103,7 +103,7 @@ class _GardenSetupScreenState extends State<GardenSetupScreen> {
               MaterialPageRoute(builder: (_) => const GardenSceneScreen()),
             ),
             icon: const Icon(Icons.wallpaper_rounded),
-            label: const Text(S.sceneEntry),
+            label: Text(S.sceneEntry),
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(

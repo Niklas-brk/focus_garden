@@ -190,20 +190,20 @@ class _ProfileCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(S.eduRoleLabel,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+          Text(S.eduRoleLabel,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           SegmentedButton<EduKind>(
-            segments: const [
+            segments: [
               ButtonSegment(
                 value: EduKind.schuelerin,
                 label: Text(S.eduSchueler),
-                icon: Icon(Icons.backpack_outlined),
+                icon: const Icon(Icons.backpack_outlined),
               ),
               ButtonSegment(
                 value: EduKind.studentin,
                 label: Text(S.eduStudent),
-                icon: Icon(Icons.school_outlined),
+                icon: const Icon(Icons.school_outlined),
               ),
             ],
             selected: {settings.eduKind},
@@ -212,8 +212,9 @@ class _ProfileCard extends StatelessWidget {
           const SizedBox(height: 16),
 
           if (isStudent) ...[
-            const Text(S.studiengangLabel,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+            Text(S.studiengangLabel,
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
             TextField(
               controller: studiengangController,
@@ -234,8 +235,9 @@ class _ProfileCard extends StatelessWidget {
 
             // Studienfächer (z. B. Lehramt: Deutsch + Reli). Jedes Modul lässt
             // sich im Editor einem Fach zuordnen; die Liste gruppiert danach.
-            const Text(S.studienfaecherLabel,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+            Text(S.studienfaecherLabel,
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -251,7 +253,7 @@ class _ProfileCard extends StatelessWidget {
                   ),
                 ActionChip(
                   avatar: const Icon(Icons.add_rounded, size: 18),
-                  label: const Text(S.studienfachAddChip),
+                  label: Text(S.studienfachAddChip),
                   onPressed: () => _addFach(context),
                 ),
               ],
@@ -267,8 +269,9 @@ class _ProfileCard extends StatelessWidget {
               ),
             ),
           ] else ...[
-            const Text(S.schoolTypeLabel,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+            Text(S.schoolTypeLabel,
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -342,16 +345,16 @@ class _ProfileCard extends StatelessWidget {
       final ok = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text(S.studienfachRemoveTitle),
-          content: const Text(S.studienfachRemoveBody),
+          title: Text(S.studienfachRemoveTitle),
+          content: Text(S.studienfachRemoveBody),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text(S.cancel),
+              child: Text(S.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.of(ctx).pop(true),
-              child: const Text(S.subjectDelete),
+              child: Text(S.subjectDelete),
             ),
           ],
         ),
@@ -499,7 +502,7 @@ class _AddFachDialogState extends State<_AddFachDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text(S.cancel),
+          child: Text(S.cancel),
         ),
         FilledButton(
           onPressed: _submit,

@@ -163,16 +163,16 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text(S.subjectDeleteTitle),
-        content: const Text(S.subjectDeleteBody),
+        title: Text(S.subjectDeleteTitle),
+        content: Text(S.subjectDeleteBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text(S.cancel),
+            child: Text(S.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text(S.subjectDelete),
+            child: Text(S.subjectDelete),
           ),
         ],
       ),
@@ -270,7 +270,7 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
               runSpacing: 4,
               children: [
                 ChoiceChip(
-                  label: const Text(S.studienfachNone),
+                  label: Text(S.studienfachNone),
                   selected: _studienfach == null,
                   onSelected: (_) => setState(() => _studienfach = null),
                 ),
@@ -302,21 +302,21 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
           // --- Beste Lernzeit (für Lernplan & Erinnerungen) ------------------
           _Label(S.learnTimeLabel),
           SegmentedButton<LearnTime>(
-            segments: const [
+            segments: [
               ButtonSegment(
                 value: LearnTime.morgens,
                 label: Text(S.learnMorgens),
-                icon: Icon(Icons.wb_sunny_outlined),
+                icon: const Icon(Icons.wb_sunny_outlined),
               ),
               ButtonSegment(
                 value: LearnTime.mittags,
                 label: Text(S.learnMittags),
-                icon: Icon(Icons.light_mode_outlined),
+                icon: const Icon(Icons.light_mode_outlined),
               ),
               ButtonSegment(
                 value: LearnTime.abends,
                 label: Text(S.learnAbends),
-                icon: Icon(Icons.nights_stay_outlined),
+                icon: const Icon(Icons.nights_stay_outlined),
               ),
             ],
             selected: {_learnTime},
@@ -353,8 +353,8 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
           const SizedBox(height: 32),
           FilledButton(
             onPressed: _save,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 2),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
               child: Text(S.subjectSave),
             ),
           ),
@@ -427,7 +427,7 @@ class _SubjectEditScreenState extends State<SubjectEditScreen> {
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Expanded(child: _Label(S.gradesSectionLabel)),
+          Expanded(child: _Label(S.gradesSectionLabel)),
           _FinalGradeBadge(
             system: system,
             value: preview,
@@ -553,7 +553,7 @@ class _KindSection extends StatelessWidget {
                 ),
               ActionChip(
                 avatar: const Icon(Icons.add_rounded, size: 18),
-                label: const Text(S.gradeAddChip),
+                label: Text(S.gradeAddChip),
                 onPressed: onAdd,
               ),
             ],
@@ -745,7 +745,7 @@ class _ExamSection extends StatelessWidget {
                 ),
               ActionChip(
                 avatar: const Icon(Icons.event_rounded, size: 18),
-                label: const Text(S.examAddChip),
+                label: Text(S.examAddChip),
                 onPressed: onAdd,
               ),
             ],
@@ -801,13 +801,13 @@ class _AddExamDialogState extends State<_AddExamDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(S.examAddTitle),
+      title: Text(S.examAddTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(S.examKindLabel2,
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          Text(S.examKindLabel2,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -822,8 +822,8 @@ class _AddExamDialogState extends State<_AddExamDialog> {
             ],
           ),
           const SizedBox(height: 16),
-          const Text(S.examDateLabel,
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          Text(S.examDateLabel,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           OutlinedButton.icon(
             onPressed: _pickDate,
@@ -839,11 +839,11 @@ class _AddExamDialogState extends State<_AddExamDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text(S.cancel),
+          child: Text(S.cancel),
         ),
         FilledButton(
           onPressed: _date == null ? null : _submit,
-          child: const Text(S.examAddButton),
+          child: Text(S.examAddButton),
         ),
       ],
     );
@@ -912,11 +912,11 @@ class _AddGradeDialogState extends State<_AddGradeDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text(S.cancel),
+          child: Text(S.cancel),
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text(S.gradeAddButton),
+          child: Text(S.gradeAddButton),
         ),
       ],
     );

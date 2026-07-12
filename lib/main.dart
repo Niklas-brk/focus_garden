@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'app.dart';
+import 'l10n/app_strings.dart';
 import 'services/blocker_service.dart';
 import 'services/notification_service.dart';
 import 'services/purchase_service.dart';
@@ -15,7 +16,11 @@ import 'state/settings_provider.dart';
 import 'state/subject_provider.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final binding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Sprache anhand der Gerätesprache wählen (Deutsch primär, sonst Englisch) –
+  // vor allem anderen, damit auch Notification-Texte schon lokalisiert sind.
+  S.init(binding.platformDispatcher.locale);
 
   // Lokale Persistenz (Hive) und Benachrichtigungen initialisieren.
   final storage = StorageService();

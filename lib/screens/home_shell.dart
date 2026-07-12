@@ -90,25 +90,25 @@ class _HomeShellState extends State<HomeShell> {
           : NavigationBar(
               selectedIndex: _index,
               onDestinationSelected: (i) => setState(() => _index = i),
-              destinations: const [
+              destinations: [
                 NavigationDestination(
-                  icon: Icon(Icons.timer_outlined),
-                  selectedIcon: Icon(Icons.timer_rounded),
+                  icon: const Icon(Icons.timer_outlined),
+                  selectedIcon: const Icon(Icons.timer_rounded),
                   label: S.tabFocus,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.local_florist_outlined),
-                  selectedIcon: Icon(Icons.local_florist_rounded),
+                  icon: const Icon(Icons.local_florist_outlined),
+                  selectedIcon: const Icon(Icons.local_florist_rounded),
                   label: S.tabGarden,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.bar_chart_outlined),
-                  selectedIcon: Icon(Icons.bar_chart_rounded),
+                  icon: const Icon(Icons.bar_chart_outlined),
+                  selectedIcon: const Icon(Icons.bar_chart_rounded),
                   label: S.tabStats,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.school_outlined),
-                  selectedIcon: Icon(Icons.school_rounded),
+                  icon: const Icon(Icons.school_outlined),
+                  selectedIcon: const Icon(Icons.school_rounded),
                   label: S.tabGrades,
                 ),
               ],

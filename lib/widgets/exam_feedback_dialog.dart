@@ -68,7 +68,7 @@ class _ExamFeedbackDialogState extends State<_ExamFeedbackDialog> {
         .replaceFirst('{datum}', S.shortDate(widget.exam.date));
 
     return AlertDialog(
-      title: const Text(S.examFeedbackTitle),
+      title: Text(S.examFeedbackTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,17 +115,17 @@ class _ExamFeedbackDialogState extends State<_ExamFeedbackDialog> {
         TextButton(
           onPressed: () => Navigator.of(context)
               .pop(const _FeedbackResult(later: true)),
-          child: const Text(S.examFeedbackLater),
+          child: Text(S.examFeedbackLater),
         ),
         TextButton(
           onPressed: () =>
               Navigator.of(context).pop(const _FeedbackResult()),
-          child: const Text(S.examFeedbackSkip),
+          child: Text(S.examFeedbackSkip),
         ),
         FilledButton(
           onPressed: () => Navigator.of(context)
               .pop(_FeedbackResult(rating: _value.round())),
-          child: const Text(S.examFeedbackSave),
+          child: Text(S.examFeedbackSave),
         ),
       ],
     );

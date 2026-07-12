@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'l10n/app_strings.dart';
@@ -75,6 +76,14 @@ class _FocusGardenAppState extends State<FocusGardenApp>
         builder: (context, settings, _) => MaterialApp(
           title: S.appName,
           debugShowCheckedModeBanner: false,
+          // Eigene Texte kommen aus S (Gerätesprache, s. S.init); die
+          // Delegates lokalisieren Framework-Bausteine wie den Datums-Dialog.
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('de'), Locale('en')],
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: settings.themeMode,

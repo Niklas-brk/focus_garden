@@ -79,7 +79,7 @@ class _StreakCard extends StatelessWidget {
                       fontSize: 14)),
               const SizedBox(height: 2),
               Text(
-                '$streak ${S.days}',
+                S.streakDays(streak),
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,

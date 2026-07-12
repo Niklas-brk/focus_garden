@@ -19,7 +19,7 @@ class StudyPlanCard extends StatelessWidget {
       await CalendarExport.share(subjects);
     } catch (_) {
       messenger.showSnackBar(
-        const SnackBar(content: Text(S.planExportError)),
+        SnackBar(content: Text(S.planExportError)),
       );
     }
   }
@@ -46,17 +46,18 @@ class StudyPlanCard extends StatelessWidget {
             children: [
               Icon(Icons.event_note_rounded, size: 20, color: scheme.primary),
               const SizedBox(width: 8),
-              const Expanded(
+              Expanded(
                 child: Text(
                   S.planTitle,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w800),
                 ),
               ),
               if (hasPlan)
                 TextButton.icon(
                   onPressed: () => _export(context),
                   icon: const Icon(Icons.calendar_month_rounded, size: 18),
-                  label: const Text(S.planExport),
+                  label: Text(S.planExport),
                 ),
             ],
           ),

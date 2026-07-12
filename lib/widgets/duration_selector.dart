@@ -23,7 +23,7 @@ class DurationSelector extends StatelessWidget {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text(S.customDuration),
+          title: Text(S.customDuration),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -45,7 +45,7 @@ class DurationSelector extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(S.cancel),
+              child: Text(S.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, value),

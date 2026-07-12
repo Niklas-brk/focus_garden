@@ -239,7 +239,7 @@ class _GardenSceneScreenState extends State<GardenSceneScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(S.sceneTitle),
+        title: Text(S.sceneTitle),
         actions: [
           if (_plants.isNotEmpty) ...[
             IconButton(
@@ -452,7 +452,7 @@ class _GardenSceneScreenState extends State<GardenSceneScreen> {
             child: OutlinedButton.icon(
               onPressed: _busy ? null : _share,
               icon: const Icon(Icons.ios_share_rounded, size: 20),
-              label: const Text(S.sceneShare),
+              label: Text(S.sceneShare),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
@@ -472,7 +472,7 @@ class _GardenSceneScreenState extends State<GardenSceneScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.wallpaper_rounded, size: 20),
-              label: const Text(S.sceneSetWallpaper),
+              label: Text(S.sceneSetWallpaper),
               style: FilledButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(

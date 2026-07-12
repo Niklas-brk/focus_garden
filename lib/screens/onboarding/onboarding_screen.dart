@@ -60,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 duration: const Duration(milliseconds: 200),
                 child: TextButton(
                   onPressed: isLast ? null : _finish,
-                  child: const Text(S.onboardSkip),
+                  child: Text(S.onboardSkip),
                 ),
               ),
             ),
@@ -68,19 +68,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: PageView(
                 controller: _controller,
                 onPageChanged: (i) => setState(() => _index = i),
-                children: const [
+                children: [
                   _OnboardPage(
-                    illustration: _WelcomeArt(),
+                    illustration: const _WelcomeArt(),
                     title: S.onboard1Title,
                     body: S.onboard1Body,
                   ),
                   _OnboardPage(
-                    illustration: _WiltArt(),
+                    illustration: const _WiltArt(),
                     title: S.onboard2Title,
                     body: S.onboard2Body,
                   ),
                   _OnboardPage(
-                    illustration: _GardenArt(),
+                    illustration: const _GardenArt(),
                     title: S.onboard3Title,
                     body: S.onboard3Body,
                   ),

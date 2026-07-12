@@ -49,7 +49,7 @@ class _FlexCardScreenState extends State<FlexCardScreen> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(S.flexShareError)),
+          SnackBar(content: Text(S.flexShareError)),
         );
       }
     } finally {
@@ -103,7 +103,7 @@ class _FlexCardScreenState extends State<FlexCardScreen> {
     final activeStyle = _isLocked(_style, premium) ? FlexCardStyle.dark : _style;
 
     return Scaffold(
-      appBar: AppBar(title: const Text(S.flexTitle)),
+      appBar: AppBar(title: Text(S.flexTitle)),
       body: SafeArea(
         child: Column(
           children: [
@@ -158,7 +158,7 @@ class _FlexCardScreenState extends State<FlexCardScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.ios_share_rounded),
-                  label: const Text(S.flexShare),
+                  label: Text(S.flexShare),
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(

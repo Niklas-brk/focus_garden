@@ -1,393 +1,420 @@
+import 'dart:ui' show Locale;
+
 import '../models/exam.dart';
 import '../models/subject.dart';
 
-/// Zentrale Textbausteine (Deutsch, primaer).
+/// Zentrale Textbausteine (Deutsch primär, Englisch vollständig).
 ///
-/// Alle sichtbaren Texte laufen ueber diese Klasse, damit spaeter leicht
-/// Englisch ergaenzt werden kann (Konzept Abschnitt 8: Strings auslagern).
+/// Alle sichtbaren Texte laufen über diese Klasse (Konzept Abschnitt 8).
+/// Die Felder sind bewusst NICHT `const`: [init] wählt beim App-Start anhand
+/// der Gerätesprache – Deutsch ist Standard, jede andere Sprache bekommt
+/// Englisch. [_applyEnglish] überschreibt dafür JEDES Feld; der Test
+/// `test/l10n_completeness_test.dart` wacht darüber, dass keins fehlt.
 class S {
+  static bool _english = false;
+
+  /// Aktive Sprache (für Datumsformate u. Ä.).
+  static bool get isEnglish => _english;
+
+  /// Wählt die Sprache anhand der Gerätesprache. Vor `runApp` aufrufen.
+  static void init(Locale locale) {
+    _english = !locale.languageCode.toLowerCase().startsWith('de');
+    if (_english) _applyEnglish();
+  }
+
   // App
-  static const appName = 'Focus Garden';
+  static String appName = 'Focus Garden';
 
   // Navigation
-  static const tabFocus = 'Fokus';
-  static const tabGarden = 'Garten';
-  static const tabStats = 'Statistik';
-  static const tabGrades = 'Noten';
+  static String tabFocus = 'Fokus';
+  static String tabGarden = 'Garten';
+  static String tabStats = 'Statistik';
+  static String tabGrades = 'Noten';
 
   // Onboarding (3 Screens, überspringbar – Konzept Abschnitt 3/4)
-  static const onboardSkip = 'Überspringen';
-  static const onboardNext = 'Weiter';
-  static const onboardStart = 'Los geht’s';
-  static const onboard1Title = 'Willkommen im Focus Garden 🌱';
-  static const onboard1Body =
+  static String onboardSkip = 'Überspringen';
+  static String onboardNext = 'Weiter';
+  static String onboardStart = 'Los geht’s';
+  static String onboard1Title = 'Willkommen im Focus Garden 🌱';
+  static String onboard1Body =
       'Konzentriere dich auf eine Sache – und eine Pflanze wächst mit jeder Minute Fokus.';
-  static const onboard2Title = 'Bleib dran, sonst welkt sie';
-  static const onboard2Body =
+  static String onboard2Title = 'Bleib dran, sonst welkt sie';
+  static String onboard2Body =
       'Verlässt du die App während der Session, verwelkt deine Pflanze. So bleibst du bei der Sache – im strengen Modus, jederzeit umstellbar.';
-  static const onboard3Title = 'Sammle & flexe';
-  static const onboard3Body =
+  static String onboard3Title = 'Sammle & flexe';
+  static String onboard3Body =
       'Jede erblühte Pflanze wandert in deinen Garten. Baue Streaks auf und teile deine Flex-Card.';
 
   // Fokus-Screen
-  static const choosePlant = 'Wähle deine Pflanze';
-  static const chooseSubject = 'Woran arbeitest du?';
-  static const chooseDuration = 'Fokusdauer';
-  static const customDuration = 'Frei';
-  static const minutesShort = 'Min';
-  static const start = 'Starten';
-  static const premiumLocked = 'Premium';
+  static String choosePlant = 'Wähle deine Pflanze';
+  static String chooseSubject = 'Woran arbeitest du?';
+  static String chooseDuration = 'Fokusdauer';
+  static String customDuration = 'Frei';
+  static String minutesShort = 'Min';
+  static String start = 'Starten';
+  static String premiumLocked = 'Premium';
   // Leerzustand: erst ein Fach/Modul anlegen (Fokus läuft immer über ein Fach)
-  static const focusNoSubjectTitle = 'Noch kein Fach';
-  static const focusNoSubjectBody =
+  static String focusNoSubjectTitle = 'Noch kein Fach';
+  static String focusNoSubjectBody =
       'Lege zuerst ein Fach an – daran wächst deine Pflanze über mehrere Sessions.';
-  static const focusNoSubjectButton = 'Fach anlegen';
-  static const focusNoSubjectTitleUni = 'Noch kein Modul';
-  static const focusNoSubjectBodyUni =
+  static String focusNoSubjectButton = 'Fach anlegen';
+  static String focusNoSubjectTitleUni = 'Noch kein Modul';
+  static String focusNoSubjectBodyUni =
       'Lege zuerst ein Modul an – daran wächst deine Pflanze über mehrere Sessions.';
-  static const focusNoSubjectButtonUni = 'Modul anlegen';
+  static String focusNoSubjectButtonUni = 'Modul anlegen';
   // Blüh-Fortschritt (mehrstufige Blüte)
-  static const bloomProgressLabel = 'Bis zur Blüte';
-  static const bloomedBadge = '🌸'; // erblühte Pflanzen dieses Fachs
-  static const bloomRemaining = 'Noch {n} Min bis zur Blüte';
+  static String bloomProgressLabel = 'Bis zur Blüte';
+  static String bloomedBadge = '🌸'; // erblühte Pflanzen dieses Fachs
+  static String bloomRemaining = 'Noch {n} Min bis zur Blüte';
 
   // Aktive Session
-  static const grows = 'wächst gerade …';
-  static const cancel = 'Abbrechen';
-  static const cancelTitle = 'Bist du sicher?';
-  static const cancelBody = 'Deine Pflanze stirbt 🥀';
-  static const cancelConfirm = 'Ja, abbrechen';
-  static const cancelKeep = 'Weiter fokussieren';
+  static String grows = 'wächst gerade …';
+  static String cancel = 'Abbrechen';
+  static String cancelTitle = 'Bist du sicher?';
+  static String cancelBody = 'Deine Pflanze stirbt 🥀';
+  static String cancelConfirm = 'Ja, abbrechen';
+  static String cancelKeep = 'Weiter fokussieren';
 
   // Ergebnis
-  static const bloomedTitle = 'Erblüht! 🌸';
-  static const bloomedBody = 'Deine Pflanze ist in den Garten gewandert.';
-  static const grownTitle = 'Gewachsen 🌿';
-  static const grownBody =
+  static String bloomedTitle = 'Erblüht! 🌸';
+  static String bloomedBody = 'Deine Pflanze ist in den Garten gewandert.';
+  static String grownTitle = 'Gewachsen 🌿';
+  static String grownBody =
       'Deine Pflanze ist ein Stück gewachsen. Bleib dran bis zur Blüte!';
-  static const wiltedTitle = 'Verwelkt 🥀';
-  static const wiltedBody = 'Diesmal nicht geschafft – der nächste Versuch zählt wieder.';
-  static const backToGarden = 'Weiter';
-  static const keepGoing = 'Weiter so';
-  static const tryAgain = 'Nochmal';
+  static String wiltedTitle = 'Verwelkt 🥀';
+  static String wiltedBody =
+      'Diesmal nicht geschafft – der nächste Versuch zählt wieder.';
+  static String backToGarden = 'Weiter';
+  static String keepGoing = 'Weiter so';
+  static String tryAgain = 'Nochmal';
 
   // Wachstumsstufen
-  static const stageSeed = 'Samen';
-  static const stageSprout = 'Spross';
-  static const stagePlant = 'Pflanze';
-  static const stageBloom = 'Blüte';
+  static String stageSeed = 'Samen';
+  static String stageSprout = 'Spross';
+  static String stagePlant = 'Pflanze';
+  static String stageBloom = 'Blüte';
 
   // Garten
-  static const gardenTitle = 'Dein Garten';
-  static const gardenEmpty = 'Noch keine Pflanzen.\nStarte deine erste Fokus-Session!';
-  static const weekSummary = 'Diese Woche';
-  static const plantsCount = 'Pflanzen';
-  static const createFlexCard = 'Flex-Card erstellen';
-  static const filterAll = 'Alle';
+  static String gardenTitle = 'Dein Garten';
+  static String gardenEmpty =
+      'Noch keine Pflanzen.\nStarte deine erste Fokus-Session!';
+  static String weekSummary = 'Diese Woche';
+  static String plantsCount = 'Pflanzen';
+  static String createFlexCard = 'Flex-Card erstellen';
+  static String filterAll = 'Alle';
 
   // Garten einrichten
-  static const gardenSetup = 'Einrichten';
-  static const gardenSetupTitle = 'Garten einrichten';
-  static const gardenNameLabel = 'Name des Gartens';
-  static const gardenNameHint = 'Wie soll dein Garten heißen?';
-  static const gardenBackground = 'Hintergrund';
-  static const gardenArrange = 'Pflanzen anordnen';
-  static const gardenArrangeHint = 'Halten & ziehen zum Umsortieren.';
-  static const gardenArrangeEmpty =
+  static String gardenSetup = 'Einrichten';
+  static String gardenSetupTitle = 'Garten einrichten';
+  static String gardenNameLabel = 'Name des Gartens';
+  static String gardenNameHint = 'Wie soll dein Garten heißen?';
+  static String gardenBackground = 'Hintergrund';
+  static String gardenArrange = 'Pflanzen anordnen';
+  static String gardenArrangeHint = 'Halten & ziehen zum Umsortieren.';
+  static String gardenArrangeEmpty =
       'Noch keine Pflanzen zum Anordnen – erblühe erst welche im Fokus.';
-  static const gardenThemeLocked = 'Premium';
-  static const save = 'Fertig';
+  static String gardenThemeLocked = 'Premium';
+  static String save = 'Fertig';
 
   // Garten-Szene / Wallpaper (Pflanzen auf einer Wiese anordnen & exportieren)
-  static const sceneEntry = 'Als Wallpaper gestalten';
-  static const sceneTitle = 'Garten-Szene';
-  static const sceneHint =
+  static String sceneEntry = 'Als Wallpaper gestalten';
+  static String sceneTitle = 'Garten-Szene';
+  static String sceneHint =
       'Ziehe Pflanzen & Deko. Deko lange drücken = entfernen.';
   // Szenen-/Tageszeit-Auswahl
-  static const sceneBackgroundLabel = 'Szene';
-  static const sceneTimeDay = 'Tag';
-  static const sceneTimeSunset = 'Sonnenuntergang';
-  static const sceneTimeNight = 'Nacht';
+  static String sceneBackgroundLabel = 'Szene';
+  static String sceneTimeDay = 'Tag';
+  static String sceneTimeSunset = 'Sonnenuntergang';
+  static String sceneTimeNight = 'Nacht';
   // Deko
-  static const sceneAddDeco = 'Deko';
-  static const sceneDecoTitle = 'Deko hinzufügen';
-  static const sceneDecoRemoved = 'Deko entfernt';
-  static const sceneEmpty =
+  static String sceneAddDeco = 'Deko';
+  static String sceneDecoTitle = 'Deko hinzufügen';
+  static String sceneDecoRemoved = 'Deko entfernt';
+  static String sceneEmpty =
       'Noch keine Pflanzen für die Szene.\nErblühe erst welche im Fokus.';
-  static const sceneShare = 'Teilen';
-  static const sceneShareText = 'Mein Focus Garden 🌱';
-  static const sceneShareError = 'Teilen hat nicht geklappt.';
-  static const sceneSetWallpaper = 'Als Hintergrund';
-  static const sceneWallpaperSet = 'Als Hintergrund festgelegt 🌱';
-  static const sceneWallpaperError = 'Hintergrund konnte nicht gesetzt werden.';
-  static const sceneReset = 'Neu anordnen';
-  static const sceneBranding = '🌱 Focus Garden';
+  static String sceneShare = 'Teilen';
+  static String sceneShareText = 'Mein Focus Garden 🌱';
+  static String sceneShareError = 'Teilen hat nicht geklappt.';
+  static String sceneSetWallpaper = 'Als Hintergrund';
+  static String sceneWallpaperSet = 'Als Hintergrund festgelegt 🌱';
+  static String sceneWallpaperError =
+      'Hintergrund konnte nicht gesetzt werden.';
+  static String sceneReset = 'Neu anordnen';
+  static String sceneBranding = '🌱 Focus Garden';
 
   // Flex-Card (Konzept Abschnitt 6)
-  static const flexTitle = 'Flex-Card';
-  static const flexWeekLabel = 'MEINE WOCHE';
-  static const flexMinutesLabel = 'Fokusminuten';
-  static const flexStreakLabel = 'Tage-Streak';
-  static const flexPlantsLabel = 'Pflanzen';
-  static const flexRecentLabel = 'Zuletzt gepflanzt';
-  static const flexBranding = '🌱 Focus Garden · ohne Abo';
-  static const flexShare = 'Teilen';
-  static const flexShareText = 'Meine Fokus-Woche mit Focus Garden 🌱';
-  static const flexShareError = 'Teilen hat nicht geklappt.';
-  static const flexStyleDark = 'Dunkel';
-  static const flexStyleCozy = 'Cozy';
-  static const flexStyleNeon = 'Neon';
+  static String flexTitle = 'Flex-Card';
+  static String flexWeekLabel = 'MEINE WOCHE';
+  static String flexMinutesLabel = 'Fokusminuten';
+  static String flexStreakLabel = 'Tage-Streak';
+  static String flexPlantsLabel = 'Pflanzen';
+  static String flexRecentLabel = 'Zuletzt gepflanzt';
+  static String flexBranding = '🌱 Focus Garden · ohne Abo';
+  static String flexShare = 'Teilen';
+  static String flexShareText = 'Meine Fokus-Woche mit Focus Garden 🌱';
+  static String flexShareError = 'Teilen hat nicht geklappt.';
+  static String flexStyleDark = 'Dunkel';
+  static String flexStyleCozy = 'Cozy';
+  static String flexStyleNeon = 'Neon';
 
   // Statistik
-  static const statsTitle = 'Statistik';
-  static const today = 'Heute';
-  static const week = 'Woche';
-  static const total = 'Gesamt';
-  static const focusMinutes = 'Fokusminuten';
-  static const sessions = 'Sessions';
-  static const streak = 'Streak';
-  static const days = 'Tage';
-  static const last7days = 'Letzte 7 Tage';
+  static String statsTitle = 'Statistik';
+  static String today = 'Heute';
+  static String week = 'Woche';
+  static String total = 'Gesamt';
+  static String focusMinutes = 'Fokusminuten';
+  static String sessions = 'Sessions';
+  static String streak = 'Streak';
+  static String days = 'Tage';
+  static String last7days = 'Letzte 7 Tage';
 
   // Noten (Schule/Studium)
-  static const gradesTitle = 'Noten';
+  static String gradesTitle = 'Noten';
   // Profil-Karte
-  static const eduRoleLabel = 'Ich bin …';
-  static const eduSchueler = 'Schüler:in';
-  static const eduStudent = 'Student:in';
-  static const schoolTypeLabel = 'Schulart';
-  static const schoolGymnasium = 'Gymnasium';
-  static const schoolRealschule = 'Realschule';
-  static const schoolHauptschule = 'Hauptschule';
-  static const schoolGesamtschule = 'Gesamtschule';
-  static const schoolFachschule = 'Fachschule';
-  static const studiengangLabel = 'Studiengang';
-  static const studiengangHint = 'z. B. Informatik B.Sc.';
+  static String eduRoleLabel = 'Ich bin …';
+  static String eduSchueler = 'Schüler:in';
+  static String eduStudent = 'Student:in';
+  static String schoolTypeLabel = 'Schulart';
+  static String schoolGymnasium = 'Gymnasium';
+  static String schoolRealschule = 'Realschule';
+  static String schoolHauptschule = 'Hauptschule';
+  static String schoolGesamtschule = 'Gesamtschule';
+  static String schoolFachschule = 'Fachschule';
+  static String studiengangLabel = 'Studiengang';
+  static String studiengangHint = 'z. B. Informatik B.Sc.';
   // Studienfächer (z. B. Lehramt: Deutsch + Reli, je mit eigenen Klausuren)
-  static const studienfaecherLabel = 'Studienfächer (optional)';
-  static const studienfaecherHint =
+  static String studienfaecherLabel = 'Studienfächer (optional)';
+  static String studienfaecherHint =
       'Studierst du mehrere Fächer (z. B. Lehramt)? Lege sie hier an und '
       'ordne jedes Modul einem Fach zu. Antippen benennt ein Fach um.';
-  static const studienfachAddChip = 'Fach';
-  static const studienfachAddTitle = 'Studienfach hinzufügen';
-  static const studienfachAddHint = 'z. B. Deutsch';
-  static const studienfachAddButton = 'Hinzufügen';
-  static const studienfachRenameTitle = 'Fach umbenennen';
-  static const studienfachRenameButton = 'Speichern';
-  static const studienfachDuplicate = 'Dieses Fach gibt es schon.';
-  static const studienfachRemoveTooltip = 'Fach entfernen';
-  static const studienfachRemoveTitle = 'Fach entfernen?';
-  static const studienfachRemoveBody =
+  static String studienfachAddChip = 'Fach';
+  static String studienfachAddTitle = 'Studienfach hinzufügen';
+  static String studienfachAddHint = 'z. B. Deutsch';
+  static String studienfachAddButton = 'Hinzufügen';
+  static String studienfachRenameTitle = 'Fach umbenennen';
+  static String studienfachRenameButton = 'Speichern';
+  static String studienfachDuplicate = 'Dieses Fach gibt es schon.';
+  static String studienfachRemoveTooltip = 'Fach entfernen';
+  static String studienfachRemoveTitle = 'Fach entfernen?';
+  static String studienfachRemoveBody =
       'Die zugeordneten Module und ihre Noten bleiben erhalten – sie stehen '
       'danach unter „Ohne Fach".';
-  static const studienfachLabel = 'Studienfach';
-  static const studienfachNone = 'Ohne Fach';
-  static const studienfachEmptyGroup = 'Noch keine Module in diesem Fach.';
-  static const gradingHintPunkte = 'Bewertung in Punkten (0–15).';
-  static const gradingHintNoten = 'Bewertung in Noten (1–6).';
-  static const gradingHintUni = 'Uni-Noten (1,0–5,0), ECTS-gewichtet.';
+  static String studienfachLabel = 'Studienfach';
+  static String studienfachNone = 'Ohne Fach';
+  static String studienfachEmptyGroup = 'Noch keine Module in diesem Fach.';
+  static String gradingHintPunkte = 'Bewertung in Punkten (0–15).';
+  static String gradingHintNoten = 'Bewertung in Noten (1–6).';
+  static String gradingHintUni = 'Uni-Noten (1,0–5,0), ECTS-gewichtet.';
   // Fächer-Liste
-  static const subjectsSchool = 'Fächer';
-  static const subjectsUni = 'Module';
-  static const subjectAddSchool = 'Fach hinzufügen';
-  static const subjectAddUni = 'Modul hinzufügen';
-  static const subjectsEmptySchool =
+  static String subjectsSchool = 'Fächer';
+  static String subjectsUni = 'Module';
+  static String subjectAddSchool = 'Fach hinzufügen';
+  static String subjectAddUni = 'Modul hinzufügen';
+  static String subjectsEmptySchool =
       'Noch keine Fächer.\nLege dein erstes Fach an!';
-  static const subjectsEmptyUni =
+  static String subjectsEmptyUni =
       'Noch keine Module.\nLege dein erstes Modul an!';
-  static const subjectNoGrade = 'Keine Note';
-  static const creditsShort = 'ECTS';
+  static String subjectNoGrade = 'Keine Note';
+  static String creditsShort = 'ECTS';
   // Durchschnitt-Karte
-  static const averageLabel = 'Durchschnitt';
-  static const averageEmpty =
+  static String averageLabel = 'Durchschnitt';
+  static String averageEmpty =
       'Trage Noten ein, um deinen Durchschnitt zu sehen.';
-  static const unitPoints = 'Punkte';
-  static const unitGrade = 'Note';
-  static const creditsSumLabel = 'Summe ECTS';
-  static const uniPassed = 'bestanden';
-  static const uniNotPassed = 'nicht bestanden';
+  static String unitPoints = 'Punkte';
+  static String unitGrade = 'Note';
+  static String creditsSumLabel = 'Summe ECTS';
+  static String uniPassed = 'bestanden';
+  static String uniNotPassed = 'nicht bestanden';
   // Fach anlegen/bearbeiten
-  static const subjectNewSchool = 'Neues Fach';
-  static const subjectNewUni = 'Neues Modul';
-  static const subjectEditSchool = 'Fach bearbeiten';
-  static const subjectEditUni = 'Modul bearbeiten';
-  static const subjectNameLabel = 'Name';
-  static const subjectNameHint = 'z. B. Mathe';
-  static const subjectNameRequired = 'Bitte gib einen Namen ein.';
-  static const subjectPlantLabel = 'Pflanze wählen';
-  static const gradeLabelPunkte = 'Punkte (0–15)';
-  static const gradeLabelNoten = 'Note (1–6)';
-  static const gradeLabelUni = 'Note (1,0–5,0)';
-  static const gradeOptionalHint = 'Optional – du kannst sie später eintragen.';
-  static const gradeInvalidPunkte = 'Bitte 0 bis 15 eingeben.';
-  static const gradeInvalidNoten = 'Bitte 1 bis 6 eingeben.';
-  static const gradeInvalidUni = 'Bitte 1,0 bis 5,0 eingeben.';
-  static const creditsLabel = 'ECTS-Punkte';
-  static const creditsHintField = 'z. B. 5';
+  static String subjectNewSchool = 'Neues Fach';
+  static String subjectNewUni = 'Neues Modul';
+  static String subjectEditSchool = 'Fach bearbeiten';
+  static String subjectEditUni = 'Modul bearbeiten';
+  static String subjectNameLabel = 'Name';
+  static String subjectNameHint = 'z. B. Mathe';
+  static String subjectNameRequired = 'Bitte gib einen Namen ein.';
+  static String subjectPlantLabel = 'Pflanze wählen';
+  static String gradeLabelPunkte = 'Punkte (0–15)';
+  static String gradeLabelNoten = 'Note (1–6)';
+  static String gradeLabelUni = 'Note (1,0–5,0)';
+  static String gradeOptionalHint = 'Optional – du kannst sie später eintragen.';
+  static String gradeInvalidPunkte = 'Bitte 0 bis 15 eingeben.';
+  static String gradeInvalidNoten = 'Bitte 1 bis 6 eingeben.';
+  static String gradeInvalidUni = 'Bitte 1,0 bis 5,0 eingeben.';
+  static String creditsLabel = 'ECTS-Punkte';
+  static String creditsHintField = 'z. B. 5';
   // Gewichtete Noten (Schule) → Zeugnisnote
-  static const gradesSectionLabel = 'Noten';
-  static const gradeKindSchulaufgabe = 'Schulaufgaben';
-  static const gradeKindKurzarbeit = 'Kurzarbeiten';
-  static const gradeKindEx = 'Exen';
-  static const gradeKindMuendlich = 'Mündliche Noten';
-  static const gradeWeightLabel = 'Gewicht';
-  static const gradeWeightHint =
+  static String gradesSectionLabel = 'Noten';
+  static String gradeKindSchulaufgabe = 'Schulaufgaben';
+  static String gradeKindKurzarbeit = 'Kurzarbeiten';
+  static String gradeKindEx = 'Exen';
+  static String gradeKindMuendlich = 'Mündliche Noten';
+  static String gradeWeightLabel = 'Gewicht';
+  static String gradeWeightHint =
       'Schulaufgaben zählen standardmäßig doppelt (2:1). Gewicht pro Art anpassbar.';
-  static const gradeAddChip = 'Note';
-  static const gradeAddTitlePunkte = 'Punkte eintragen';
-  static const gradeAddTitleNoten = 'Note eintragen';
-  static const gradeAddButton = 'Hinzufügen';
-  static const gradeRemoveTooltip = 'Note entfernen';
-  static const finalGradeLabel = 'Zeugnisnote';
-  static const finalGradeLabelUni = 'Modulnote';
-  static const finalGradeNone = 'noch keine';
-  static const subjectSave = 'Speichern';
-  static const subjectDelete = 'Löschen';
-  static const subjectDeleteTitle = 'Wirklich löschen?';
-  static const subjectDeleteBody =
+  static String gradeAddChip = 'Note';
+  static String gradeAddTitlePunkte = 'Punkte eintragen';
+  static String gradeAddTitleNoten = 'Note eintragen';
+  static String gradeAddButton = 'Hinzufügen';
+  static String gradeRemoveTooltip = 'Note entfernen';
+  static String finalGradeLabel = 'Zeugnisnote';
+  static String finalGradeLabelUni = 'Modulnote';
+  static String finalGradeNone = 'noch keine';
+  static String subjectSave = 'Speichern';
+  static String subjectDelete = 'Löschen';
+  static String subjectDeleteTitle = 'Wirklich löschen?';
+  static String subjectDeleteBody =
       'Das Fach und sein Fortschritt werden entfernt.';
 
   // Premium (Konzept Abschnitt 7)
-  static const premiumTitle = 'Focus Garden Premium';
-  static const premiumSubtitle =
+  static String premiumTitle = 'Focus Garden Premium';
+  static String premiumSubtitle =
       'Einmalig. Kein Abo. Keine Werbung. Keine Datensammlung.';
-  static const premiumBenefitPlants = '6 zusätzliche Premium-Pflanzen';
-  static const premiumBenefitStyles = 'Alle Flex-Card-Stile (Cozy & Neon)';
-  static const premiumBenefitThemes = 'Alle Garten-Themes';
-  static const premiumBuy = 'Freischalten';
-  static const premiumPriceLoading = 'Preis wird geladen …';
-  static const premiumRestore = 'Käufe wiederherstellen';
-  static const premiumRestoreStarted = 'Suche nach früheren Käufen …';
-  static const premiumRestored = 'Premium wiederhergestellt 💚';
-  static const premiumCanceled = 'Kauf abgebrochen.';
-  static const premiumError =
+  static String premiumBenefitPlants = '6 zusätzliche Premium-Pflanzen';
+  static String premiumBenefitStyles = 'Alle Flex-Card-Stile (Cozy & Neon)';
+  static String premiumBenefitThemes = 'Alle Garten-Themes';
+  static String premiumBuy = 'Freischalten';
+  static String premiumPriceLoading = 'Preis wird geladen …';
+  static String premiumRestore = 'Käufe wiederherstellen';
+  static String premiumRestoreStarted = 'Suche nach früheren Käufen …';
+  static String premiumRestored = 'Premium wiederhergestellt 💚';
+  static String premiumCanceled = 'Kauf abgebrochen.';
+  static String premiumError =
       'Kauf hat nicht geklappt. Bitte später erneut versuchen.';
-  static const premiumUnavailable =
+  static String premiumUnavailable =
       'Der Store ist gerade nicht verfügbar. Bitte später erneut versuchen.';
-  static const premiumActiveTitle = 'Premium ist aktiv 💚';
-  static const premiumActiveBody = 'Danke, dass du Focus Garden unterstützt!';
-  static const premiumClose = 'Schließen';
-  static const premiumSection = 'Premium';
-  static const premiumUpsell = 'Premium freischalten';
-  static const premiumUpsellHint =
+  static String premiumActiveTitle = 'Premium ist aktiv 💚';
+  static String premiumActiveBody = 'Danke, dass du Focus Garden unterstützt!';
+  static String premiumClose = 'Schließen';
+  static String premiumSection = 'Premium';
+  static String premiumUpsell = 'Premium freischalten';
+  static String premiumUpsellHint =
       'Alle Pflanzen, Stile & Themes – einmalig, ohne Abo.';
-  static const premiumUnlockCta = 'Freischalten';
-  static const debugTogglePremium = '[Debug] Premium umschalten';
+  static String premiumUnlockCta = 'Freischalten';
+  static String debugTogglePremium = '[Debug] Premium umschalten';
 
   // Einstellungen
-  static const settingsTitle = 'Einstellungen';
-  static const sounds = 'Sounds';
-  static const haptics = 'Haptik';
-  static const strictMode = 'Strenger Modus';
-  static const strictModeHint =
+  static String settingsTitle = 'Einstellungen';
+  static String sounds = 'Sounds';
+  static String haptics = 'Haptik';
+  static String strictMode = 'Strenger Modus';
+  static String strictModeHint =
       'An: Verlässt du die App länger als 30 Sekunden, verwelkt die Pflanze. Aus: nur eine Warnung.';
-  static const blocker = 'Andere Apps blockieren';
-  static const blockerHint =
+  static String blocker = 'Andere Apps blockieren';
+  static String blockerHint =
       'Verlässt du während einer Session die App, legt sich ein Vollbild-Hinweis über die andere App. Notfall-Abbruch bleibt immer möglich.';
-  static const blockerPermNeeded =
+  static String blockerPermNeeded =
       'Dafür brauchst du die Berechtigung „Über anderen Apps anzeigen".';
-  static const blockerPermDenied =
+  static String blockerPermDenied =
       'Ohne diese Berechtigung lässt sich das Blockieren nicht einschalten.';
-  static const appearance = 'Erscheinungsbild';
+  static String appearance = 'Erscheinungsbild';
 
   // Fokus-Schild (Overlay über anderen Apps)
-  static const shieldTitle = 'Bleib dran 🌱';
-  static const shieldBody = 'Du bist im Fokus-Modus.\nZurück zum Lernen.';
-  static const shieldResume = 'Zurück zur App';
-  static const shieldAbort = 'Notfall: Session abbrechen';
-  static const shieldAbortConfirm = 'Wirklich abbrechen? Pflanze stirbt 🥀';
-  static const themeDark = 'Dunkel';
-  static const themeLight = 'Hell';
-  static const themeSystem = 'System';
+  static String shieldTitle = 'Bleib dran 🌱';
+  static String shieldBody = 'Du bist im Fokus-Modus.\nZurück zum Lernen.';
+  static String shieldResume = 'Zurück zur App';
+  static String shieldAbort = 'Notfall: Session abbrechen';
+  static String shieldAbortConfirm = 'Wirklich abbrechen? Pflanze stirbt 🥀';
+  static String themeDark = 'Dunkel';
+  static String themeLight = 'Hell';
+  static String themeSystem = 'System';
 
   // Benachrichtigungen
-  static const notifBloomTitle = 'Deine Pflanze ist erblüht 🌸';
-  static const notifBloomBody = 'Starke Fokus-Session! Schau sie dir im Garten an.';
-  static const notifGrownTitle = 'Session geschafft 🌿';
-  static const notifGrownBody =
+  static String notifBloomTitle = 'Deine Pflanze ist erblüht 🌸';
+  static String notifBloomBody =
+      'Starke Fokus-Session! Schau sie dir im Garten an.';
+  static String notifGrownTitle = 'Session geschafft 🌿';
+  static String notifGrownBody =
       'Deine Pflanze ist ein Stück gewachsen. Bleib dran!';
-  static const notifWarnTitle = 'Komm zurück! 🥀';
-  static const notifWarnBody =
+  static String notifWarnTitle = 'Komm zurück! 🥀';
+  static String notifWarnBody =
       'Deine Pflanze verwelkt, wenn du nicht in 30 Sekunden zurückkommst.';
 
   // Beste Lernzeit (pro Fach, für Lernplan & Erinnerungen)
-  static const learnTimeLabel = 'Beste Lernzeit';
-  static const learnTimeHint =
+  static String learnTimeLabel = 'Beste Lernzeit';
+  static String learnTimeHint =
       'Zu dieser Tageszeit erinnert dich der Lernplan an dieses Fach.';
-  static const learnMorgens = 'Morgens';
-  static const learnMittags = 'Mittags';
-  static const learnAbends = 'Abends';
+  static String learnMorgens = 'Morgens';
+  static String learnMittags = 'Mittags';
+  static String learnAbends = 'Abends';
 
   // Prüfungstermine (pro Fach)
-  static const examsSectionLabel = 'Prüfungstermine';
-  static const examsHint =
+  static String examsSectionLabel = 'Prüfungstermine';
+  static String examsHint =
       'Der Lernplan erinnert dich rechtzeitig vor jedem Termin.';
-  static const examAddChip = 'Termin';
-  static const examAddTitle = 'Prüfung eintragen';
-  static const examKindLabel2 = 'Art der Prüfung';
-  static const examDateLabel = 'Datum';
-  static const examPickDate = 'Datum wählen';
-  static const examAddButton = 'Eintragen';
-  static const examRemoveTooltip = 'Termin entfernen';
-  static const examKindSchulaufgabe = 'Schulaufgabe';
-  static const examKindKlausur = 'Klausur';
-  static const examKindEx = 'Ex';
-  static const examKindKurzarbeit = 'Kurzarbeit';
-  static const examKindPraesentation = 'Präsentation';
-  static const examRatedPrefix = 'Lief'; // z. B. „Lief 7/10"
+  static String examAddChip = 'Termin';
+  static String examAddTitle = 'Prüfung eintragen';
+  static String examKindLabel2 = 'Art der Prüfung';
+  static String examDateLabel = 'Datum';
+  static String examPickDate = 'Datum wählen';
+  static String examAddButton = 'Eintragen';
+  static String examRemoveTooltip = 'Termin entfernen';
+  static String examKindSchulaufgabe = 'Schulaufgabe';
+  static String examKindKlausur = 'Klausur';
+  static String examKindEx = 'Ex';
+  static String examKindKurzarbeit = 'Kurzarbeit';
+  static String examKindPraesentation = 'Präsentation';
+  static String examRatedPrefix = 'Lief'; // z. B. „Lief 7/10"
 
   // Prüfungs-Feedback (nach dem Termin, 1–10)
-  static const examFeedbackTitle = 'Wie lief deine Prüfung?';
-  static const examFeedbackBody =
+  static String examFeedbackTitle = 'Wie lief deine Prüfung?';
+  static String examFeedbackBody =
       '{art} in {fach} am {datum} – wie lief es (1 = schlecht, 10 = super)?';
-  static const examFeedbackHint =
+  static String examFeedbackHint =
       'Deine Antwort passt den Lernplan an: lief es schwer, plant er dieses Fach öfter ein.';
-  static const examFeedbackSave = 'Speichern';
-  static const examFeedbackLater = 'Später';
-  static const examFeedbackSkip = 'Ohne Bewertung';
+  static String examFeedbackSave = 'Speichern';
+  static String examFeedbackLater = 'Später';
+  static String examFeedbackSkip = 'Ohne Bewertung';
 
   // Lernplan
-  static const planTitle = 'Lernplan';
-  static const planEmpty =
+  static String planTitle = 'Lernplan';
+  static String planEmpty =
       'Trage bei deinen Fächern Prüfungstermine ein – dann plant Focus Garden, wann du wofür lernst.';
-  static const planToday = 'Heute';
-  static const planTomorrow = 'Morgen';
-  static const planExamToday = 'Prüfung!';
-  static const planDaysLeft = 'in {n} Tagen';
-  static const planExport = 'In Kalender';
-  static const planExportText =
+  static String planToday = 'Heute';
+  static String planTomorrow = 'Morgen';
+  static String planExamToday = 'Prüfung!';
+  static String planDaysLeft = 'in {n} Tagen';
+  static String planExport = 'In Kalender';
+  static String planExportText =
       'Mein Lernplan aus Focus Garden 🌱 – Datei öffnen, um die Termine in deinen Kalender zu übernehmen.';
-  static const planExportError = 'Export hat nicht geklappt.';
-  static const planReminders = 'Lern-Erinnerungen';
-  static const planRemindersHint =
+  static String planExportError = 'Export hat nicht geklappt.';
+  static String planReminders = 'Lern-Erinnerungen';
+  static String planRemindersHint =
       'Tägliche Erinnerung zur besten Lernzeit des wichtigsten Fachs.';
-  static const planSuggestionPrefix = 'Heute dran:';
+  static String planSuggestionPrefix = 'Heute dran:';
 
   // Pausen-Empfehlung
-  static const breakTitle = 'Empfohlene Pause';
-  static const breakBodyShort =
+  static String breakTitle = 'Empfohlene Pause';
+  static String breakBodyShort =
       '{n} Min frische Luft, Wasser trinken, kurz bewegen – dann läuft die nächste Session besser.';
-  static const breakBodyLong =
+  static String breakBodyLong =
       'Starke Leistung – Zeit für eine längere Pause ({n} Min). Dein Kopf braucht sie nach mehreren Sessions wirklich.';
-  static const breakStart = 'Pause starten';
-  static const breakRunning = 'Pause läuft …';
-  static const breakSkip = 'Ohne Pause weiter';
-  static const breakDone = 'Pause vorbei 🌱';
+  static String breakStart = 'Pause starten';
+  static String breakRunning = 'Pause läuft …';
+  static String breakSkip = 'Ohne Pause weiter';
+  static String breakDone = 'Pause vorbei 🌱';
 
   // Benachrichtigungen: Lernplan & Pause
-  static const notifStudyTitle = 'Zeit zum Lernen 📚';
-  static const notifStudyBody = '{fach}: {art} {wann} – eine Fokus-Session jetzt zahlt sich aus!';
-  static const notifExamTodayTitle = 'Heute: {art} in {fach}';
-  static const notifExamTodayBody = 'Viel Erfolg! 🍀 Du hast dafür gelernt.';
-  static const notifBreakOverTitle = 'Pause vorbei 🌱';
-  static const notifBreakOverBody =
+  static String notifStudyTitle = 'Zeit zum Lernen 📚';
+  static String notifStudyBody =
+      '{fach}: {art} {wann} – eine Fokus-Session jetzt zahlt sich aus!';
+  static String notifExamTodayTitle = 'Heute: {art} in {fach}';
+  static String notifExamTodayBody = 'Viel Erfolg! 🍀 Du hast dafür gelernt.';
+  static String notifBreakOverTitle = 'Pause vorbei 🌱';
+  static String notifBreakOverBody =
       'Frisch erholt? Starte deine nächste Fokus-Session.';
 
-  static const weekdayShort = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
-  static const monthNames = [
+  static List<String> weekdayShort = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+  static List<String> monthNames = [
     'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
     'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
   ];
+
+  /// Streak-Anzeige mit korrektem Singular/Plural („1 Tag", „7 Tage").
+  static String streakDays(int n) {
+    if (_english) return '$n ${n == 1 ? 'day' : 'days'}';
+    return '$n ${n == 1 ? 'Tag' : 'Tage'}';
+  }
 
   /// Anzeigename einer Prüfungs-Kategorie.
   static String examKind(ExamKind kind) {
@@ -417,7 +444,352 @@ class S {
     }
   }
 
-  /// Kurzes deutsches Datum „15.07." – für Chips, Plan und Dialoge.
-  static String shortDate(DateTime d) =>
-      '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.';
+  /// Kurzes Datum – deutsch „15.07.", englisch „07/15".
+  static String shortDate(DateTime d) {
+    final day = d.day.toString().padLeft(2, '0');
+    final month = d.month.toString().padLeft(2, '0');
+    return _english ? '$month/$day' : '$day.$month.';
+  }
+
+  /// Englische Texte. Überschreibt JEDES Feld oben (Test wacht darüber).
+  static void _applyEnglish() {
+    appName = 'Focus Garden';
+
+    tabFocus = 'Focus';
+    tabGarden = 'Garden';
+    tabStats = 'Stats';
+    tabGrades = 'Grades';
+
+    onboardSkip = 'Skip';
+    onboardNext = 'Next';
+    onboardStart = 'Let’s go';
+    onboard1Title = 'Welcome to Focus Garden 🌱';
+    onboard1Body =
+        'Focus on one thing – and a plant grows with every minute of focus.';
+    onboard2Title = 'Stay focused or it wilts';
+    onboard2Body =
+        'If you leave the app during a session, your plant wilts. That keeps you on task – in strict mode, changeable anytime.';
+    onboard3Title = 'Collect & flex';
+    onboard3Body =
+        'Every bloomed plant joins your garden. Build streaks and share your Flex Card.';
+
+    choosePlant = 'Choose your plant';
+    chooseSubject = 'What are you working on?';
+    chooseDuration = 'Focus duration';
+    customDuration = 'Custom';
+    minutesShort = 'min';
+    start = 'Start';
+    premiumLocked = 'Premium';
+    focusNoSubjectTitle = 'No subject yet';
+    focusNoSubjectBody =
+        'Create a subject first – your plant grows on it across sessions.';
+    focusNoSubjectButton = 'Create subject';
+    focusNoSubjectTitleUni = 'No module yet';
+    focusNoSubjectBodyUni =
+        'Create a module first – your plant grows on it across sessions.';
+    focusNoSubjectButtonUni = 'Create module';
+    bloomProgressLabel = 'Until bloom';
+    bloomedBadge = '🌸';
+    bloomRemaining = '{n} min left until bloom';
+
+    grows = 'is growing …';
+    cancel = 'Cancel';
+    cancelTitle = 'Are you sure?';
+    cancelBody = 'Your plant will die 🥀';
+    cancelConfirm = 'Yes, cancel';
+    cancelKeep = 'Keep focusing';
+
+    bloomedTitle = 'Bloomed! 🌸';
+    bloomedBody = 'Your plant has moved into your garden.';
+    grownTitle = 'Grown 🌿';
+    grownBody = 'Your plant grew a little. Keep going until it blooms!';
+    wiltedTitle = 'Wilted 🥀';
+    wiltedBody = 'Not this time – your next try counts again.';
+    backToGarden = 'Continue';
+    keepGoing = 'Keep it up';
+    tryAgain = 'Try again';
+
+    stageSeed = 'Seed';
+    stageSprout = 'Sprout';
+    stagePlant = 'Plant';
+    stageBloom = 'Bloom';
+
+    gardenTitle = 'Your garden';
+    gardenEmpty = 'No plants yet.\nStart your first focus session!';
+    weekSummary = 'This week';
+    plantsCount = 'Plants';
+    createFlexCard = 'Create Flex Card';
+    filterAll = 'All';
+
+    gardenSetup = 'Customize';
+    gardenSetupTitle = 'Customize garden';
+    gardenNameLabel = 'Garden name';
+    gardenNameHint = 'What should your garden be called?';
+    gardenBackground = 'Background';
+    gardenArrange = 'Arrange plants';
+    gardenArrangeHint = 'Hold & drag to reorder.';
+    gardenArrangeEmpty =
+        'No plants to arrange yet – bloom some in focus first.';
+    gardenThemeLocked = 'Premium';
+    save = 'Done';
+
+    sceneEntry = 'Design as wallpaper';
+    sceneTitle = 'Garden scene';
+    sceneHint = 'Drag plants & decor. Long-press decor to remove it.';
+    sceneBackgroundLabel = 'Scene';
+    sceneTimeDay = 'Day';
+    sceneTimeSunset = 'Sunset';
+    sceneTimeNight = 'Night';
+    sceneAddDeco = 'Decor';
+    sceneDecoTitle = 'Add decor';
+    sceneDecoRemoved = 'Decor removed';
+    sceneEmpty = 'No plants for the scene yet.\nBloom some in focus first.';
+    sceneShare = 'Share';
+    sceneShareText = 'My Focus Garden 🌱';
+    sceneShareError = 'Sharing didn’t work.';
+    sceneSetWallpaper = 'Set as wallpaper';
+    sceneWallpaperSet = 'Set as wallpaper 🌱';
+    sceneWallpaperError = 'Couldn’t set the wallpaper.';
+    sceneReset = 'Rearrange';
+    sceneBranding = '🌱 Focus Garden';
+
+    flexTitle = 'Flex Card';
+    flexWeekLabel = 'MY WEEK';
+    flexMinutesLabel = 'Focus minutes';
+    flexStreakLabel = 'day streak';
+    flexPlantsLabel = 'Plants';
+    flexRecentLabel = 'Recently planted';
+    flexBranding = '🌱 Focus Garden · no subscription';
+    flexShare = 'Share';
+    flexShareText = 'My focus week with Focus Garden 🌱';
+    flexShareError = 'Sharing didn’t work.';
+    flexStyleDark = 'Dark';
+    flexStyleCozy = 'Cozy';
+    flexStyleNeon = 'Neon';
+
+    statsTitle = 'Stats';
+    today = 'Today';
+    week = 'Week';
+    total = 'Total';
+    focusMinutes = 'Focus minutes';
+    sessions = 'Sessions';
+    streak = 'Streak';
+    days = 'days';
+    last7days = 'Last 7 days';
+
+    gradesTitle = 'Grades';
+    eduRoleLabel = 'I am …';
+    eduSchueler = 'School student';
+    eduStudent = 'University student';
+    schoolTypeLabel = 'School type';
+    schoolGymnasium = 'Gymnasium';
+    schoolRealschule = 'Realschule';
+    schoolHauptschule = 'Hauptschule';
+    schoolGesamtschule = 'Gesamtschule';
+    schoolFachschule = 'Fachschule';
+    studiengangLabel = 'Degree program';
+    studiengangHint = 'e.g. Computer Science B.Sc.';
+    studienfaecherLabel = 'Study subjects (optional)';
+    studienfaecherHint =
+        'Studying several subjects (e.g. teaching degree)? Create them here '
+        'and assign each module to one. Tap to rename a subject.';
+    studienfachAddChip = 'Subject';
+    studienfachAddTitle = 'Add study subject';
+    studienfachAddHint = 'e.g. German';
+    studienfachAddButton = 'Add';
+    studienfachRenameTitle = 'Rename subject';
+    studienfachRenameButton = 'Save';
+    studienfachDuplicate = 'This subject already exists.';
+    studienfachRemoveTooltip = 'Remove subject';
+    studienfachRemoveTitle = 'Remove subject?';
+    studienfachRemoveBody =
+        'Its modules and grades are kept – they’ll show under “No subject”.';
+    studienfachLabel = 'Study subject';
+    studienfachNone = 'No subject';
+    studienfachEmptyGroup = 'No modules in this subject yet.';
+    gradingHintPunkte = 'Grading in points (0–15).';
+    gradingHintNoten = 'Grading in marks (1–6).';
+    gradingHintUni = 'University grades (1.0–5.0), ECTS-weighted.';
+    subjectsSchool = 'Subjects';
+    subjectsUni = 'Modules';
+    subjectAddSchool = 'Add subject';
+    subjectAddUni = 'Add module';
+    subjectsEmptySchool = 'No subjects yet.\nCreate your first subject!';
+    subjectsEmptyUni = 'No modules yet.\nCreate your first module!';
+    subjectNoGrade = 'No grade';
+    creditsShort = 'ECTS';
+    averageLabel = 'Average';
+    averageEmpty = 'Enter grades to see your average.';
+    unitPoints = 'points';
+    unitGrade = 'grade';
+    creditsSumLabel = 'Total ECTS';
+    uniPassed = 'passed';
+    uniNotPassed = 'not passed';
+    subjectNewSchool = 'New subject';
+    subjectNewUni = 'New module';
+    subjectEditSchool = 'Edit subject';
+    subjectEditUni = 'Edit module';
+    subjectNameLabel = 'Name';
+    subjectNameHint = 'e.g. Math';
+    subjectNameRequired = 'Please enter a name.';
+    subjectPlantLabel = 'Choose a plant';
+    gradeLabelPunkte = 'Points (0–15)';
+    gradeLabelNoten = 'Mark (1–6)';
+    gradeLabelUni = 'Grade (1.0–5.0)';
+    gradeOptionalHint = 'Optional – you can add it later.';
+    gradeInvalidPunkte = 'Please enter 0 to 15.';
+    gradeInvalidNoten = 'Please enter 1 to 6.';
+    gradeInvalidUni = 'Please enter 1.0 to 5.0.';
+    creditsLabel = 'ECTS credits';
+    creditsHintField = 'e.g. 5';
+    gradesSectionLabel = 'Grades';
+    gradeKindSchulaufgabe = 'Major tests';
+    gradeKindKurzarbeit = 'Short tests';
+    gradeKindEx = 'Pop quizzes';
+    gradeKindMuendlich = 'Oral grades';
+    gradeWeightLabel = 'Weight';
+    gradeWeightHint =
+        'Major tests count double by default (2:1). Weight adjustable per type.';
+    gradeAddChip = 'Grade';
+    gradeAddTitlePunkte = 'Enter points';
+    gradeAddTitleNoten = 'Enter grade';
+    gradeAddButton = 'Add';
+    gradeRemoveTooltip = 'Remove grade';
+    finalGradeLabel = 'Report grade';
+    finalGradeLabelUni = 'Module grade';
+    finalGradeNone = 'none yet';
+    subjectSave = 'Save';
+    subjectDelete = 'Delete';
+    subjectDeleteTitle = 'Really delete?';
+    subjectDeleteBody = 'The subject and its progress will be removed.';
+
+    premiumTitle = 'Focus Garden Premium';
+    premiumSubtitle =
+        'One-time purchase. No subscription. No ads. No data collection.';
+    premiumBenefitPlants = '6 additional premium plants';
+    premiumBenefitStyles = 'All Flex Card styles (Cozy & Neon)';
+    premiumBenefitThemes = 'All garden themes';
+    premiumBuy = 'Unlock';
+    premiumPriceLoading = 'Loading price …';
+    premiumRestore = 'Restore purchases';
+    premiumRestoreStarted = 'Looking for previous purchases …';
+    premiumRestored = 'Premium restored 💚';
+    premiumCanceled = 'Purchase canceled.';
+    premiumError = 'Purchase didn’t work. Please try again later.';
+    premiumUnavailable =
+        'The store isn’t available right now. Please try again later.';
+    premiumActiveTitle = 'Premium is active 💚';
+    premiumActiveBody = 'Thanks for supporting Focus Garden!';
+    premiumClose = 'Close';
+    premiumSection = 'Premium';
+    premiumUpsell = 'Unlock Premium';
+    premiumUpsellHint =
+        'All plants, styles & themes – one-time, no subscription.';
+    premiumUnlockCta = 'Unlock';
+    debugTogglePremium = '[Debug] Toggle premium';
+
+    settingsTitle = 'Settings';
+    sounds = 'Sounds';
+    haptics = 'Haptics';
+    strictMode = 'Strict mode';
+    strictModeHint =
+        'On: leaving the app for more than 30 seconds wilts your plant. Off: just a warning.';
+    blocker = 'Block other apps';
+    blockerHint =
+        'If you leave the app during a session, a full-screen reminder covers the other app. Emergency cancel is always possible.';
+    blockerPermNeeded =
+        'This needs the “Display over other apps” permission.';
+    blockerPermDenied =
+        'Blocking can’t be enabled without this permission.';
+    appearance = 'Appearance';
+
+    shieldTitle = 'Stay focused 🌱';
+    shieldBody = 'You’re in focus mode.\nBack to studying.';
+    shieldResume = 'Back to the app';
+    shieldAbort = 'Emergency: cancel session';
+    shieldAbortConfirm = 'Really cancel? Your plant dies 🥀';
+    themeDark = 'Dark';
+    themeLight = 'Light';
+    themeSystem = 'System';
+
+    notifBloomTitle = 'Your plant has bloomed 🌸';
+    notifBloomBody = 'Great focus session! Check it out in your garden.';
+    notifGrownTitle = 'Session complete 🌿';
+    notifGrownBody = 'Your plant grew a little. Keep going!';
+    notifWarnTitle = 'Come back! 🥀';
+    notifWarnBody =
+        'Your plant will wilt if you don’t come back within 30 seconds.';
+
+    learnTimeLabel = 'Best study time';
+    learnTimeHint =
+        'The study plan reminds you of this subject at this time of day.';
+    learnMorgens = 'Morning';
+    learnMittags = 'Midday';
+    learnAbends = 'Evening';
+
+    examsSectionLabel = 'Exam dates';
+    examsHint = 'The study plan reminds you in time before each date.';
+    examAddChip = 'Date';
+    examAddTitle = 'Add exam';
+    examKindLabel2 = 'Type of exam';
+    examDateLabel = 'Date';
+    examPickDate = 'Pick a date';
+    examAddButton = 'Add';
+    examRemoveTooltip = 'Remove date';
+    examKindSchulaufgabe = 'Major test';
+    examKindKlausur = 'Exam';
+    examKindEx = 'Pop quiz';
+    examKindKurzarbeit = 'Short test';
+    examKindPraesentation = 'Presentation';
+    examRatedPrefix = 'Went';
+
+    examFeedbackTitle = 'How did your exam go?';
+    examFeedbackBody =
+        '{art} in {fach} on {datum} – how did it go (1 = bad, 10 = great)?';
+    examFeedbackHint =
+        'Your answer tunes the study plan: if it was hard, this subject gets scheduled more often.';
+    examFeedbackSave = 'Save';
+    examFeedbackLater = 'Later';
+    examFeedbackSkip = 'No rating';
+
+    planTitle = 'Study plan';
+    planEmpty =
+        'Add exam dates to your subjects – then Focus Garden plans when to study what.';
+    planToday = 'Today';
+    planTomorrow = 'Tomorrow';
+    planExamToday = 'Exam!';
+    planDaysLeft = 'in {n} days';
+    planExport = 'To calendar';
+    planExportText =
+        'My study plan from Focus Garden 🌱 – open the file to add the dates to your calendar.';
+    planExportError = 'Export didn’t work.';
+    planReminders = 'Study reminders';
+    planRemindersHint =
+        'Daily reminder at the best study time of your most important subject.';
+    planSuggestionPrefix = 'Up today:';
+
+    breakTitle = 'Recommended break';
+    breakBodyShort =
+        '{n} min of fresh air, water, a bit of movement – the next session will go better.';
+    breakBodyLong =
+        'Great work – time for a longer break ({n} min). Your brain really needs it after several sessions.';
+    breakStart = 'Start break';
+    breakRunning = 'Break running …';
+    breakSkip = 'Skip break';
+    breakDone = 'Break’s over 🌱';
+
+    notifStudyTitle = 'Time to study 📚';
+    notifStudyBody =
+        '{fach}: {art} {wann} – a focus session now pays off!';
+    notifExamTodayTitle = 'Today: {art} in {fach}';
+    notifExamTodayBody = 'Good luck! 🍀 You studied for this.';
+    notifBreakOverTitle = 'Break’s over 🌱';
+    notifBreakOverBody = 'Refreshed? Start your next focus session.';
+
+    weekdayShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+  }
 }

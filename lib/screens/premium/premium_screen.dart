@@ -15,7 +15,7 @@ class PremiumScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final premium = context.watch<SettingsProvider>().premium;
     return Scaffold(
-      appBar: AppBar(title: const Text(S.premiumTitle)),
+      appBar: AppBar(title: Text(S.premiumTitle)),
       body: SafeArea(
         child: premium ? const _ActiveView() : const _PurchaseView(),
       ),
@@ -38,9 +38,9 @@ class _ActiveView extends StatelessWidget {
           children: [
             Icon(Icons.verified_rounded, size: 72, color: scheme.primary),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               S.premiumActiveTitle,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -55,7 +55,7 @@ class _ActiveView extends StatelessWidget {
             const SizedBox(height: 28),
             FilledButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text(S.premiumClose),
+              child: Text(S.premiumClose),
             ),
           ],
         ),
@@ -121,10 +121,10 @@ class _PurchaseViewState extends State<_PurchaseView> {
           child: Text('🌿', style: TextStyle(fontSize: 56, color: scheme.primary)),
         ),
         const SizedBox(height: 12),
-        const Center(
+        Center(
           child: Text(
             S.premiumTitle,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
           ),
         ),
         const SizedBox(height: 8),
@@ -139,9 +139,9 @@ class _PurchaseViewState extends State<_PurchaseView> {
           ),
         ),
         const SizedBox(height: 28),
-        const _Benefit(icon: Icons.local_florist_rounded, text: S.premiumBenefitPlants),
-        const _Benefit(icon: Icons.style_rounded, text: S.premiumBenefitStyles),
-        const _Benefit(icon: Icons.palette_rounded, text: S.premiumBenefitThemes),
+        _Benefit(icon: Icons.local_florist_rounded, text: S.premiumBenefitPlants),
+        _Benefit(icon: Icons.style_rounded, text: S.premiumBenefitStyles),
+        _Benefit(icon: Icons.palette_rounded, text: S.premiumBenefitThemes),
         const SizedBox(height: 28),
         if (!purchases.storeAvailable)
           Padding(
@@ -178,10 +178,10 @@ class _PurchaseViewState extends State<_PurchaseView> {
               : () {
                   purchases.restore();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(S.premiumRestoreStarted)),
+                    SnackBar(content: Text(S.premiumRestoreStarted)),
                   );
                 },
-          child: const Text(S.premiumRestore),
+          child: Text(S.premiumRestore),
         ),
         // Nur im Debug-Build: Premium ohne echten Kauf testen. Im Release
         // ist dieser Zweig komplett wegkompiliert.
@@ -190,7 +190,7 @@ class _PurchaseViewState extends State<_PurchaseView> {
           OutlinedButton(
             onPressed: () =>
                 context.read<SettingsProvider>().debugTogglePremium(),
-            child: const Text(S.debugTogglePremium),
+            child: Text(S.debugTogglePremium),
           ),
         ],
       ],

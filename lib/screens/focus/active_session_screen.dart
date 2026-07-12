@@ -17,19 +17,19 @@ class ActiveSessionScreen extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(S.cancelTitle),
-        content: const Text(S.cancelBody),
+        title: Text(S.cancelTitle),
+        content: Text(S.cancelBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text(S.cancelKeep),
+            child: Text(S.cancelKeep),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text(S.cancelConfirm),
+            child: Text(S.cancelConfirm),
           ),
         ],
       ),
@@ -119,7 +119,7 @@ class ActiveSessionScreen extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: () => _confirmCancel(context),
               icon: const Icon(Icons.close_rounded),
-              label: const Text(S.cancel),
+              label: Text(S.cancel),
               style: OutlinedButton.styleFrom(
                 foregroundColor: scheme.error,
                 side: BorderSide(color: scheme.error.withValues(alpha: 0.5)),

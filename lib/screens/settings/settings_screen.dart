@@ -33,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
     } else {
       settings.blockerOn = false;
       messenger.showSnackBar(
-        const SnackBar(content: Text(S.blockerPermDenied)),
+        SnackBar(content: Text(S.blockerPermDenied)),
       );
     }
   }
@@ -44,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text(S.settingsTitle)),
+      appBar: AppBar(title: Text(S.settingsTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -54,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
             child: Column(
               children: [
                 SwitchListTile(
-                  title: const Text(S.strictMode),
+                  title: Text(S.strictMode),
                   subtitle: Text(
                     S.strictModeHint,
                     style: TextStyle(
@@ -66,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
-                  title: const Text(S.blocker),
+                  title: Text(S.blocker),
                   subtitle: Text(
                     S.blockerHint,
                     style: TextStyle(
@@ -78,19 +78,19 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
-                  title: const Text(S.sounds),
+                  title: Text(S.sounds),
                   value: settings.soundsOn,
                   onChanged: (v) => settings.soundsOn = v,
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
-                  title: const Text(S.haptics),
+                  title: Text(S.haptics),
                   value: settings.hapticsOn,
                   onChanged: (v) => settings.hapticsOn = v,
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
-                  title: const Text(S.planReminders),
+                  title: Text(S.planReminders),
                   subtitle: Text(
                     S.planRemindersHint,
                     style: TextStyle(
@@ -234,7 +234,7 @@ class _PremiumSectionState extends State<_PremiumSection> {
       return _Card(
         child: ListTile(
           leading: Icon(Icons.verified_rounded, color: scheme.primary),
-          title: const Text(S.premiumActiveTitle),
+          title: Text(S.premiumActiveTitle),
           subtitle: Text(
             S.premiumActiveBody,
             style: TextStyle(
@@ -250,7 +250,7 @@ class _PremiumSectionState extends State<_PremiumSection> {
           ListTile(
             leading: Icon(Icons.workspace_premium_rounded,
                 color: scheme.primary),
-            title: const Text(S.premiumUpsell),
+            title: Text(S.premiumUpsell),
             subtitle: Text(
               S.premiumUpsellHint,
               style: TextStyle(
@@ -264,11 +264,11 @@ class _PremiumSectionState extends State<_PremiumSection> {
           const Divider(height: 1),
           ListTile(
             leading: const Icon(Icons.restore_rounded),
-            title: const Text(S.premiumRestore),
+            title: Text(S.premiumRestore),
             onTap: () {
               context.read<PurchaseService>().restore();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text(S.premiumRestoreStarted)),
+                SnackBar(content: Text(S.premiumRestoreStarted)),
               );
             },
           ),

@@ -9,6 +9,11 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 /// Die eigentliche Freischaltung passiert nicht hier, sondern über den
 /// Callback [onPremiumUnlocked] (setzt das Premium-Flag in den Einstellungen),
 /// damit dieser Dienst nichts über den Rest der App wissen muss.
+/// Einmaliges Kauf-Ereignis, das die UI dem Nutzer melden soll (SnackBar).
+/// Wird über [takeFeedback] abgeholt und dabei gelöscht, damit dieselbe
+/// Meldung nicht mehrfach erscheint.
+enum PurchaseFeedback { error, canceled, restored }
+
 class PurchaseService extends ChangeNotifier {
   static const String productId = 'premium_unlock';
 
@@ -21,6 +26,7 @@ class PurchaseService extends ChangeNotifier {
   bool _pending = false;
   ProductDetails? _product;
   String? _lastError;
+  PurchaseFeedback? _feedback;
 
   PurchaseService({required this.onPremiumUnlocked});
 
@@ -38,6 +44,13 @@ class PurchaseService extends ChangeNotifier {
 
   String? get lastError => _lastError;
 
+  /// Holt das jüngste Kauf-Ereignis ab und löscht es dabei.
+  PurchaseFeedback? takeFeedback() {
+    final f = _feedback;
+    _feedback = null;
+    return f;
+  }
+
   Future<void> init() async {
     _storeAvailable = await _iap.isAvailable();
     if (!_storeAvailable) {
@@ -53,6 +66,17 @@ class PurchaseService extends ChangeNotifier {
       },
     );
     await _loadProduct();
+
+    // Persistiertes Premium-Flag beim Start gegen den Store abgleichen:
+    // liefert der Store einen früheren Kauf, kommt er als `restored` über den
+    // Stream (deckt Neuinstallation/Gerätewechsel ab). Findet er nichts, wird
+    // Premium bewusst NICHT entzogen – ein Offline-Start darf einen ehrlichen
+    // Käufer nicht aussperren.
+    try {
+      await _iap.restorePurchases();
+    } catch (_) {
+      // Kein Nutzer-Feedback nötig: reiner Hintergrund-Abgleich beim Start.
+    }
   }
 
   Future<void> _loadProduct() async {
@@ -77,6 +101,7 @@ class PurchaseService extends ChangeNotifier {
     } catch (e) {
       _pending = false;
       _lastError = e.toString();
+      _feedback = PurchaseFeedback.error;
       notifyListeners();
     }
   }
@@ -84,7 +109,22 @@ class PurchaseService extends ChangeNotifier {
   /// Stellt frühere Käufe wieder her (Pflicht laut Konzept Abschnitt 7).
   Future<void> restore() async {
     _lastError = null;
-    await _iap.restorePurchases();
+    try {
+      await _iap.restorePurchases();
+    } catch (e) {
+      _lastError = e.toString();
+      _feedback = PurchaseFeedback.error;
+      notifyListeners();
+    }
+  }
+
+  /// Play Billing meldet „bereits gekauft", wenn ein Käufer erneut auf Kaufen
+  /// tippt (z. B. nach Neuinstallation, bevor der Start-Abgleich fertig war).
+  /// Das ist kein Fehler, sondern ein Besitz-Nachweis.
+  bool _isAlreadyOwned(IAPError? e) {
+    final text = '${e?.code ?? ''} ${e?.message ?? ''}'.toLowerCase();
+    return text.contains('already') && text.contains('own') ||
+        text.contains('item_already_owned');
   }
 
   void _onPurchaseUpdates(List<PurchaseDetails> purchases) {
@@ -94,13 +134,25 @@ class PurchaseService extends ChangeNotifier {
           _pending = true;
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
-          if (p.productID == productId) onPremiumUnlocked();
+          if (p.productID == productId) {
+            onPremiumUnlocked();
+            if (p.status == PurchaseStatus.restored) {
+              _feedback = PurchaseFeedback.restored;
+            }
+          }
           _pending = false;
         case PurchaseStatus.error:
           _pending = false;
-          _lastError = p.error?.message;
+          if (p.productID == productId && _isAlreadyOwned(p.error)) {
+            onPremiumUnlocked();
+            _feedback = PurchaseFeedback.restored;
+          } else {
+            _lastError = p.error?.message;
+            _feedback = PurchaseFeedback.error;
+          }
         case PurchaseStatus.canceled:
           _pending = false;
+          _feedback = PurchaseFeedback.canceled;
       }
       // Pflicht: jeden abgeschlossenen/fehlgeschlagenen Kauf bestätigen,
       // sonst liefert der Store ihn immer wieder aus.

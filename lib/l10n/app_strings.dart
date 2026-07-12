@@ -250,14 +250,18 @@ class S {
   // Premium (Konzept Abschnitt 7)
   static const premiumTitle = 'Focus Garden Premium';
   static const premiumSubtitle =
-      'Einmal zahlen, für immer freigeschaltet – ohne Abo.';
+      'Einmalig. Kein Abo. Keine Werbung. Keine Datensammlung.';
   static const premiumBenefitPlants = '6 zusätzliche Premium-Pflanzen';
   static const premiumBenefitStyles = 'Alle Flex-Card-Stile (Cozy & Neon)';
-  static const premiumBenefitNoAds = 'Keine Werbung mehr';
+  static const premiumBenefitThemes = 'Alle Garten-Themes';
   static const premiumBuy = 'Freischalten';
-  static const premiumPriceFallback = '1,99 €';
+  static const premiumPriceLoading = 'Preis wird geladen …';
   static const premiumRestore = 'Käufe wiederherstellen';
   static const premiumRestoreStarted = 'Suche nach früheren Käufen …';
+  static const premiumRestored = 'Premium wiederhergestellt 💚';
+  static const premiumCanceled = 'Kauf abgebrochen.';
+  static const premiumError =
+      'Kauf hat nicht geklappt. Bitte später erneut versuchen.';
   static const premiumUnavailable =
       'Der Store ist gerade nicht verfügbar. Bitte später erneut versuchen.';
   static const premiumActiveTitle = 'Premium ist aktiv 💚';
@@ -265,7 +269,8 @@ class S {
   static const premiumClose = 'Schließen';
   static const premiumSection = 'Premium';
   static const premiumUpsell = 'Premium freischalten';
-  static const premiumUpsellHint = 'Alle Pflanzen & Stile, keine Werbung.';
+  static const premiumUpsellHint =
+      'Alle Pflanzen, Stile & Themes – einmalig, ohne Abo.';
   static const premiumUnlockCta = 'Freischalten';
   static const debugTogglePremium = '[Debug] Premium umschalten';
 

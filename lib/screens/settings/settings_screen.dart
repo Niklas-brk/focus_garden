@@ -184,13 +184,51 @@ class SettingsScreen extends StatelessWidget {
 
 /// Premium-Kachel oben in den Einstellungen: Upsell (mit „Wiederherstellen")
 /// bzw. Aktiv-Hinweis (Konzept Abschnitt 7).
-class _PremiumSection extends StatelessWidget {
+class _PremiumSection extends StatefulWidget {
   final bool premium;
   const _PremiumSection({required this.premium});
 
   @override
+  State<_PremiumSection> createState() => _PremiumSectionState();
+}
+
+class _PremiumSectionState extends State<_PremiumSection> {
+  PurchaseService? _service;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final service = context.read<PurchaseService>();
+    if (!identical(service, _service)) {
+      _service?.removeListener(_onPurchaseEvent);
+      _service = service..addListener(_onPurchaseEvent);
+    }
+  }
+
+  @override
+  void dispose() {
+    _service?.removeListener(_onPurchaseEvent);
+    super.dispose();
+  }
+
+  /// Ergebnis der Wiederherstellung melden (Erfolg/Abbruch/Fehler).
+  void _onPurchaseEvent() {
+    final feedback = _service?.takeFeedback();
+    if (feedback == null || !mounted) return;
+    final text = switch (feedback) {
+      PurchaseFeedback.canceled => S.premiumCanceled,
+      PurchaseFeedback.restored => S.premiumRestored,
+      PurchaseFeedback.error => S.premiumError,
+    };
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final premium = widget.premium;
 
     if (premium) {
       return _Card(

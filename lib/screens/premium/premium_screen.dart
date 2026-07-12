@@ -64,14 +64,53 @@ class _ActiveView extends StatelessWidget {
   }
 }
 
-class _PurchaseView extends StatelessWidget {
+class _PurchaseView extends StatefulWidget {
   const _PurchaseView();
+
+  @override
+  State<_PurchaseView> createState() => _PurchaseViewState();
+}
+
+class _PurchaseViewState extends State<_PurchaseView> {
+  PurchaseService? _service;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final service = context.read<PurchaseService>();
+    if (!identical(service, _service)) {
+      _service?.removeListener(_onPurchaseEvent);
+      _service = service..addListener(_onPurchaseEvent);
+    }
+  }
+
+  @override
+  void dispose() {
+    _service?.removeListener(_onPurchaseEvent);
+    super.dispose();
+  }
+
+  /// Meldet Kauf-Ereignisse (Abbruch, Fehler, Wiederherstellung) als SnackBar.
+  void _onPurchaseEvent() {
+    final feedback = _service?.takeFeedback();
+    if (feedback == null || !mounted) return;
+    final text = switch (feedback) {
+      PurchaseFeedback.canceled => S.premiumCanceled,
+      PurchaseFeedback.restored => S.premiumRestored,
+      PurchaseFeedback.error => S.premiumError,
+    };
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final purchases = context.watch<PurchaseService>();
-    final price = purchases.price ?? S.premiumPriceFallback;
+    // Preis kommt IMMER lokalisiert vom Store – nie hardcoden. Solange er
+    // nicht geladen ist, bleibt der Kauf-Button deaktiviert.
+    final price = purchases.price;
     final canBuy = purchases.product != null && !purchases.purchasePending;
 
     return ListView(
@@ -102,7 +141,7 @@ class _PurchaseView extends StatelessWidget {
         const SizedBox(height: 28),
         const _Benefit(icon: Icons.local_florist_rounded, text: S.premiumBenefitPlants),
         const _Benefit(icon: Icons.style_rounded, text: S.premiumBenefitStyles),
-        const _Benefit(icon: Icons.block_rounded, text: S.premiumBenefitNoAds),
+        const _Benefit(icon: Icons.palette_rounded, text: S.premiumBenefitThemes),
         const SizedBox(height: 28),
         if (!purchases.storeAvailable)
           Padding(
@@ -128,7 +167,7 @@ class _PurchaseView extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : Text(
-                  '${S.premiumBuy} · $price',
+                  price != null ? '${S.premiumBuy} · $price' : S.premiumPriceLoading,
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                 ),
         ),

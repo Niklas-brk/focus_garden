@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'app.dart';
 import 'services/blocker_service.dart';
@@ -24,9 +23,6 @@ Future<void> main() async {
 
   final notifications = NotificationService();
   await notifications.init();
-
-  // Werbe-SDK starten (Konzept Abschnitt 7, nur Banner im Statistik-Tab).
-  await MobileAds.instance.initialize();
 
   final sound = SoundService();
   final blocker = BlockerService();

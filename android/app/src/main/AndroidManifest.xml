@@ -12,12 +12,6 @@
         android:label="Focus Garden"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <!-- AdMob-App-ID. Aktuell die offizielle Google-TEST-ID (Konzept
-             Abschnitt 7: bis Launch nur Test-IDs). Vor dem Release durch die
-             echte AdMob-App-ID ersetzen. -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

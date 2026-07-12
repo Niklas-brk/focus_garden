@@ -32,7 +32,8 @@ android {
         applicationId = "com.focusgarden.focus_garden"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        // google_mobile_ads verlangt mindestens API 23, daher fest gesetzt.
+        // flutter_secure_storage (Hive-Schluessel im Android Keystore) verlangt
+        // mindestens API 23, daher fest gesetzt.
         minSdk = maxOf(flutter.minSdkVersion, 23)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

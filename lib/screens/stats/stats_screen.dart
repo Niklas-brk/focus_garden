@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../l10n/app_strings.dart';
 import '../../state/history_provider.dart';
 import '../../utils/stats.dart';
-import '../../widgets/banner_ad_slot.dart';
 
 /// Statistik-Tab: Streak, Kennzahlen und 7-Tage-Diagramm (Konzept Abschnitt 3).
 class StatsScreen extends StatelessWidget {
@@ -49,9 +48,6 @@ class StatsScreen extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         _WeekChart(bars: bars),
-        // Dezenter Banner NUR hier und nur in der Gratis-Version
-        // (Konzept Abschnitt 4/7). Versteckt sich bei Premium selbst.
-        const Center(child: BannerAdSlot()),
       ],
     );
   }
